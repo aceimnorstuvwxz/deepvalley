@@ -4,10 +4,12 @@ using UnityEngine.UI;
 
 public class ScopeSwitcher : MonoBehaviour {
 
+	private UIController uiController;
 
 	// Use this for initialization
 	void Start () {
-	
+		uiController = GameObject.Find ("UI-Canvas").GetComponent<UIController> ();
+		Debug.Assert (uiController);
 	}
 	
 	// Update is called once per frame
@@ -22,6 +24,9 @@ public class ScopeSwitcher : MonoBehaviour {
 
 
 		// control the cross image
+		uiController.swiftSightScope (value);
+
+
 	}
 
 	public void OnSlidingDone() {

@@ -48,8 +48,8 @@
      <Compile Include="Assets\Scripts\CannonController.cs" />
      <Compile Include="Assets\Scripts\Gizmo.cs" />
      <Compile Include="Assets\Scripts\ScopeSwitcher.cs" />
+     <Compile Include="Assets\Scripts\UIController.cs" />
      <Compile Include="Assets\Scripts\joycontroller.cs" />
-     <Compile Include="Assets\Scripts\uicontriller.cs" />
      <None Include="Assets\Shaders\custom_mobile_particle_vertexlit.shader" />
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
