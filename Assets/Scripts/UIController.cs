@@ -18,10 +18,15 @@ public class UIController : MonoBehaviour {
 	}
 
 	public void swiftSightScope(float radio) {
+
+		// fenhua 
 		float alphaOfMiddle = 1f - Mathf.Abs (radio - 0.5f) / 0.5f;
 		fenhua_open.color = new Color (1, 1, 1, alphaOfMiddle);
 
 		float alphaOfSecond = radio > 0.5f ? (1f - Mathf.Abs (radio - 1f) / 0.5f) : 0f;
 		fenhua_pos1.color = new Color (1, 1, 1, alphaOfSecond);
+
+		// camera position
 	}
+
 }

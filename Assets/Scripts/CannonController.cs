@@ -7,16 +7,19 @@ public class CannonController : MonoBehaviour {
 	public float vertical_rotate_speed = 1.0f;
 	public float vertical_angle_max = 45.0f;
 	public float vertical_angle_min = -10.0f;
+	public float sight_scope_var = 90f;
 
 	private GameObject cannonShifter;
 	private GameObject cannonBore;
 	private float currentVertalRotate;
 
+	private Camera mainCamera;
+
 	// Use this for initialization
 	void Start () {
 		cannonShifter = GameObject.Find ("cannon-shifter");
 		cannonBore = GameObject.Find ("cannon-bore");
-		Debug.Assert (cannonShifter && cannonBore);
+		mainCamera = GameObject.Find ("main-camera").GetComponent<Camera> ();
 		currentVertalRotate = 0;
 	}
 	
@@ -45,5 +48,10 @@ public class CannonController : MonoBehaviour {
 			currentVertalRotate += delta;
 			cannonBore.transform.Rotate(new Vector3(0,0,-delta));
 		}
+	}
+
+	public void swiftSightScope(float radio) 
+	{
+		mainCamera.fieldOfView = 100 - radio * sight_scope_var;
 	}
 }

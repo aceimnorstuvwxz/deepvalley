@@ -5,11 +5,12 @@ using UnityEngine.UI;
 public class ScopeSwitcher : MonoBehaviour {
 
 	private UIController uiController;
+	private CannonController cannonController;
 
 	// Use this for initialization
 	void Start () {
 		uiController = GameObject.Find ("UI-Canvas").GetComponent<UIController> ();
-		Debug.Assert (uiController);
+		cannonController = GameObject.Find ("cannon").GetComponent<CannonController> ();
 	}
 	
 	// Update is called once per frame
@@ -25,6 +26,9 @@ public class ScopeSwitcher : MonoBehaviour {
 
 		// control the cross image
 		uiController.swiftSightScope (value);
+
+		// controll camera scaling
+		cannonController.swiftSightScope (value);
 
 
 	}
