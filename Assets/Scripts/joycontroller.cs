@@ -3,13 +3,17 @@ using System.Collections;
 
 public class joycontroller : MonoBehaviour {
 
+	private GameObject cannon;
+
 	// Use this for initialization
 	void Start () {
+		cannon = GameObject.Find ("cannon");
+		Debug.Assert (cannon);
 	}
 
+	// out posRadio is uniformed [-1,1]
 	bool isRectContainsPoint(RectTransform rectTransform, Vector2 position, out Vector2 posRadio) 
 	{
-		bool res = false;
 		Vector3[] corners = new Vector3[4];
 
 		rectTransform.GetWorldCorners (corners);
@@ -31,9 +35,14 @@ public class joycontroller : MonoBehaviour {
 		if (xMin != xMax && yMax != yMin) {
 			posRadio.x = (position.x - xMin) / (xMax - xMin);
 			posRadio.y = (position.y - yMin) / (yMax - yMin);
+
+			//make uniform
+			posRadio -= new Vector2(0.5f,0.5f);
+			posRadio = posRadio*2f;
 		} else {
 			posRadio.x = posRadio.y = 0;
 		}
+
 
 		Debug.Log(string.Format("xMin={0}, xMax={1}, yMin={2}, yMax={3}, rx={4}, ry={5}",
 		                        xMin, xMax, yMin, yMax, posRadio.x, posRadio.y));
@@ -55,7 +64,8 @@ public class joycontroller : MonoBehaviour {
 		foreach (var touch in Input.touches) 
 		{
 			if (isRectContainsPoint(rect, touch.position, out posRadio)) {
-				Debug.Log("Joy in");
+				var cannonController = cannon.GetComponent<CannonController>();
+				cannonController.shift(posRadio);
 			}
 		}
 

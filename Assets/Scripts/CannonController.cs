@@ -5,7 +5,7 @@ public class CannonController : MonoBehaviour {
 	public float shift_radio_threshold = 0.3f;
 	public float horizontal_rotate_speed = 1.0f;
 	public float vertical_rotate_speed = 1.0f;
-	public float vertical_angle_max = 60.0f;
+	public float vertical_angle_max = 45.0f;
 	public float vertical_angle_min = -10.0f;
 
 	private GameObject cannonShifter;
@@ -22,7 +22,7 @@ public class CannonController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		shift (new Vector2 (1, 1));
+//		shift (new Vector2 (1, 1));
 	}
 
 
