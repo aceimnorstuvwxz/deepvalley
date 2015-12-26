@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Gizmo.cs" />
+     <Compile Include="Assets\Scripts\joycontroller.cs" />
      <Compile Include="Assets\Scripts\uicontriller.cs" />
      <None Include="Assets\Shaders\custom_mobile_particle_vertexlit.shader" />
  <Reference Include="UnityEngine.Networking">

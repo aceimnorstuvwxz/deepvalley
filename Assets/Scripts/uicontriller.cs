@@ -62,4 +62,8 @@ public class uicontriller : MonoBehaviour {
 	public void OnClickShoot() {
 		Debug.Log ("shoot");
 	}
+
+	public void OnDirMove() {
+		Debug.Log ("dir move");
+	}
 }
