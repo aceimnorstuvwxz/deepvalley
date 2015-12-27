@@ -8,7 +8,6 @@ public class joycontroller : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		cannon = GameObject.Find ("cannon");
-		Debug.Assert (cannon);
 	}
 
 	// out posRadio is uniformed [-1,1]

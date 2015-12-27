@@ -14,6 +14,9 @@ public class CannonController : MonoBehaviour {
 	private float currentVertalRotate;
 	private float moveRate;
 
+	private RadarController radarController;
+
+
 	private Camera mainCamera;
 
 	// Use this for initialization
@@ -23,6 +26,8 @@ public class CannonController : MonoBehaviour {
 		mainCamera = GameObject.Find ("main-camera").GetComponent<Camera> ();
 		currentVertalRotate = 0;
 		moveRate = 1f;
+
+		radarController = GameObject.Find ("radar").GetComponent<RadarController> ();
 	}
 	
 	// Update is called once per frame
@@ -40,6 +45,8 @@ public class CannonController : MonoBehaviour {
 			return;
 		}
 		cannonShifter.transform.Rotate (new Vector3(0,horizontal_rotate_speed*radioXY.x*moveRate,0));
+
+		radarController.turnSightScope (cannonShifter.transform.eulerAngles.y);
 
 		//!careful for euler stays in [0-360]
 		if (currentVertalRotate > vertical_angle_max && radioXY.y > 0 ||

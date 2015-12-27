@@ -6,11 +6,13 @@ public class ScopeSwitcher : MonoBehaviour {
 
 	private UIController uiController;
 	private CannonController cannonController;
+	private RadarController radarController;
 
 	// Use this for initialization
 	void Start () {
 		uiController = GameObject.Find ("UI-Canvas").GetComponent<UIController> ();
 		cannonController = GameObject.Find ("cannon").GetComponent<CannonController> ();
+		radarController = GameObject.Find ("radar").GetComponent<RadarController> ();
 	}
 	
 	// Update is called once per frame
@@ -27,9 +29,11 @@ public class ScopeSwitcher : MonoBehaviour {
 		// control the cross image
 		uiController.swiftSightScope (value);
 
-		// controll camera scaling
+		// control camera scaling
 		cannonController.swiftSightScope (value);
 
+		// control radar's scope view
+		radarController.swiftSightScope (value);
 
 	}
 
