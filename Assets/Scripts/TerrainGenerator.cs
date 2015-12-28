@@ -38,6 +38,10 @@ public class TerrainGenerator : MonoBehaviour {
 		width += 1;
 
 		heightMap = new float[width,width];
+		heightMap [0,0] = init_height;
+		heightMap [0,width - 1] = init_height;
+		heightMap [width - 1,0] = init_height;
+		heightMap [width - 1,width - 1] = init_height;
 
 
 		int currentStep = width - 1;
@@ -50,7 +54,8 @@ public class TerrainGenerator : MonoBehaviour {
 			}
 			int halfStep = currentStep/2;
 			for (int y = 0; y < width; y += halfStep) {
-				for (int x = y%(halfStep) == 0 ? halfStep : 0; x < width; x+= currentStep) {
+				for (int x = y%(currentStep) == 0 ? halfStep : 0; x < width; x+= currentStep) {
+//					Debug.Log(x.ToString() + " " +y.ToString() + " " + halfStep.ToString());
 					square(new Hmp(x-halfStep,y), new Hmp(x+halfStep, y), new Hmp(x, y-halfStep), new Hmp(x, y+halfStep),currentRandomScope);
 				}
 			}
@@ -75,7 +80,7 @@ public class TerrainGenerator : MonoBehaviour {
 		int centerX = (lb.x + rt.x) / 2;
 		int centerY = (lb.y + rt.y) / 2;
 		Hmp center = new Hmp (centerX, centerY);
-		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + (float)((randomGen.NextDouble()-0.5))*randomScope;
+		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + (float)((randomGen.NextDouble()-0.5)*2)*randomScope;
 		setHmpv (center, centerValue);
 
 		/*
@@ -115,7 +120,7 @@ public class TerrainGenerator : MonoBehaviour {
 			cnt ++;
 		} 
 
-		float centerValue = amount / cnt + (float)((randomGen.NextDouble () - 0.5)) * randomScope;
+		float centerValue = amount / cnt + (float)((randomGen.NextDouble () - 0.5)*2) * randomScope;
 		Hmp center = new Hmp (top.x, left.y);
 		setHmpv (center, centerValue);
 
