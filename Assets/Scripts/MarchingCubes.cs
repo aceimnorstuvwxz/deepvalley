@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class MarchingCubes : MonoBehaviour {
+	// Marching Cubes case table according to GPU gems 3 chapter1 !
 
 	private int[] case_to_numpolys = new int[256]{
 		0 , 1 , 1 , 2 , 1 , 2 , 2 , 3 , 1 , 2 , 2 , 3 , 2 , 3 , 3 , 2 , 1 , 2 , 2 , 3 , 2 , 3 , 3 , 4 , 2 , 3 , 3 , 4 , 3 , 4 , 4 , 3 ,
