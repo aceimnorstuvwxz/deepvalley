@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\CannonController.cs" />
      <Compile Include="Assets\Scripts\Gizmo.cs" />
      <Compile Include="Assets\Scripts\MapGenerator.cs" />
+     <Compile Include="Assets\Scripts\MarchingCubes.cs" />
      <Compile Include="Assets\Scripts\MeshGenerator.cs" />
      <Compile Include="Assets\Scripts\ScopeSwitcher.cs" />
      <Compile Include="Assets\Scripts\TerrainGenerator.cs" />
