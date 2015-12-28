@@ -3,18 +3,19 @@ using System.Collections;
 
 // as the terrain self
 public class TerrainGenerator : MonoBehaviour {
+
 	public int width_para_n = 5; //2^N + 1 per edge
 	public float reduce_rate = 0.7f; //random value scope reduce radio
 	public float init_height = 0f;
 	public float init_random_scope = 10f;
-
-
-
 	public string random_seed = "arisecbf";
 
+	private float [,] _heightMap;
+	private float _minHeight;
+	private float _maxHeight;
+	private bool[,,] _voxels;
+	private System.Random _randomGen;
 
-	private float [,] heightMap;
-	private System.Random randomGen;
 
 	class Hmp //height map point
 	{
@@ -29,7 +30,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	void generateHeightMap()
 	{
-		randomGen = new System.Random(random_seed.GetHashCode());
+		_randomGen = new System.Random(random_seed.GetHashCode());
 
 		int width = 1;
 		for (int i = 0; i < width_para_n; i++) {
@@ -37,11 +38,13 @@ public class TerrainGenerator : MonoBehaviour {
 		}
 		width += 1;
 
-		heightMap = new float[width,width];
-		heightMap [0,0] = init_height;
-		heightMap [0,width - 1] = init_height;
-		heightMap [width - 1,0] = init_height;
-		heightMap [width - 1,width - 1] = init_height;
+		_heightMap = new float[width,width];
+		_heightMap [0,0] = init_height;
+		_heightMap [0,width - 1] = init_height;
+		_heightMap [width - 1,0] = init_height;
+		_heightMap [width - 1,width - 1] = init_height;
+
+		_minHeight = _maxHeight = 0;
 
 
 		int currentStep = width - 1;
@@ -62,16 +65,20 @@ public class TerrainGenerator : MonoBehaviour {
 			currentStep = currentStep/2;
 			currentRandomScope = currentRandomScope*reduce_rate;
 		}
+
+
 	}
 
 	float getHmpv(Hmp p) {
-		return heightMap [p.x, p.y];
+		return _heightMap [p.x, p.y];
 	}
 	void setHmpv(Hmp p, float v) {
-		heightMap [p.x, p.y] = v;
+		_heightMap [p.x, p.y] = v;
+		_minHeight = Mathf.Min (_minHeight, v);
+		_maxHeight = Mathf.Max (_maxHeight, v);
 	}
 	bool isLegelHmp(Hmp p) {
-		int width = heightMap.GetLength (0);
+		int width = _heightMap.GetLength (0);
 		return p.x >= 0 && p.x < width && p.y >= 0 && p.y < width;
 	}
 
@@ -80,7 +87,7 @@ public class TerrainGenerator : MonoBehaviour {
 		int centerX = (lb.x + rt.x) / 2;
 		int centerY = (lb.y + rt.y) / 2;
 		Hmp center = new Hmp (centerX, centerY);
-		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + (float)((randomGen.NextDouble()-0.5)*2)*randomScope;
+		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + (float)((_randomGen.NextDouble()-0.5)*2)*randomScope;
 		setHmpv (center, centerValue);
 
 		/*
@@ -120,14 +127,42 @@ public class TerrainGenerator : MonoBehaviour {
 			cnt ++;
 		} 
 
-		float centerValue = amount / cnt + (float)((randomGen.NextDouble () - 0.5)*2) * randomScope;
+		float centerValue = amount / cnt + (float)((_randomGen.NextDouble () - 0.5)*2) * randomScope;
 		Hmp center = new Hmp (top.x, left.y);
 		setHmpv (center, centerValue);
 
 	}
 
+	void generateVoxelMesh() 
+	{
+		// using Height map && minHeight/maxHeight, using 1 as step!!
+
+
+		//new voxels
+		float totalHeight = (_maxHeight - _minHeight);
+		int voxelHeight = (int)totalHeight + 1;
+		int width = _heightMap.GetLength (0);
+		_voxels = new bool[width,width,voxelHeight]; // x,y,height
+
+		//heightmap to voxels
+		for (int y = 0; y < width; y++) {
+			for (int x = 0; x < width; x++) {
+				float v = getHmpv(new Hmp(x,y));
+				int height = (int)(v-_minHeight);
+				for (int i = 0; i < voxelHeight; i++) {
+					_voxels[x,y,i] = (i <= height);
+				}
+			}
+		}
+
+
+		//marching cubes
+
+	}
+
 	public void refreshHeightMap(){
 		generateHeightMap ();
+		generateVoxelMesh ();
 	}
 
 	// Use this for initialization
@@ -141,8 +176,8 @@ public class TerrainGenerator : MonoBehaviour {
 	}
 
 	void OnDrawGizmos() {
-		if (heightMap != null) {
-			int width = heightMap.GetLength (0);
+		if (_heightMap != null) {
+			int width = _heightMap.GetLength (0);
 			int height = width;
 			for (int x = 0; x < width; x ++) {
 				for (int y = 0; y < height; y ++) {
