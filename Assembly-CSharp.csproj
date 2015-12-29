@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\UIController.cs" />
      <Compile Include="Assets\Scripts\joycontroller.cs" />
      <None Include="Assets\Shaders\custom_mobile_particle_vertexlit.shader" />
+     <None Include="Assets\Shaders\NewUnlitShader.shader" />
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>

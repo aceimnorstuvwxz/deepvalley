@@ -177,7 +177,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 		//new voxels
 		float totalHeight = (_maxHeight - _minHeight);
-		int voxelHeight = (int)totalHeight + 1;
+		int voxelHeight = (int)totalHeight + 2;
 		int width = _heightMap.GetLength (0);
 		_voxels = new int[width,width,voxelHeight]; // x,y,height
 
@@ -209,6 +209,13 @@ public class TerrainGenerator : MonoBehaviour {
 		Debug.Log ("vertices count = " + _vertices.Count.ToString ());
 		Debug.Log ("triangle count = " + (_triangles.Count / 3).ToString ());
 
+		
+		Mesh mesh = new Mesh();
+		GetComponent<MeshFilter>().mesh = mesh;
+		
+		mesh.vertices = _vertices.ToArray();
+		mesh.triangles = _triangles.ToArray();
+		mesh.RecalculateNormals();
 	}
 
 	private MarchingCubes _marchingCubes  = new MarchingCubes();
