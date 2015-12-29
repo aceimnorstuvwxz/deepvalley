@@ -28,6 +28,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	private MeshFilter[] _meshFilters;
 	private GameObject[] _childGameObjets;
+	private int _currentUsingMesh;
 
 
 
@@ -205,7 +206,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 
 		//marching cubes
-
+		_currentUsingMesh = 0;
 		_voxelPointIndexTable = new Dictionary<VoxelNode, int> [mesh_count];
 		_vertices = new List<Vector3>[mesh_count];
 		_triangles = new List<int>[mesh_count];
@@ -216,9 +217,9 @@ public class TerrainGenerator : MonoBehaviour {
 			_triangles[i] = new List<int> ();
 		}
 
-		for (int h = 0; h < _voxels.GetLength(2)-1; h++) {
-			for (int y = 0; y < _voxels.GetLength(1)-1; y++) {
-				for (int x = 0; x < _voxels.GetLength(0)-1; x++) {
+		for (int y = 0; y < _voxels.GetLength(1)-1; y++) {
+			for (int x = 0; x < _voxels.GetLength(0)-1; x++) {
+				for (int h = 0; h < _voxels.GetLength(2)-1; h++) {
 					marchPerCube(x,y,h);
 				}
 			}
@@ -339,37 +340,41 @@ public class TerrainGenerator : MonoBehaviour {
 
 	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
 	{
+		if (_vertices [_currentUsingMesh].Count > 64990) {
+			_currentUsingMesh++;
+			Debug.Assert(_currentUsingMesh < mesh_count);
+		}
 		if (smooth_normal) {
 			//a
-			if (!_voxelPointIndexTable[0].ContainsKey (a)) {
-				_voxelPointIndexTable[0].Add (a, _vertices[0].Count);
-				_vertices[0].Add (a.toVector ());
+			if (!_voxelPointIndexTable[_currentUsingMesh].ContainsKey (a)) {
+				_voxelPointIndexTable[_currentUsingMesh].Add (a, _vertices[_currentUsingMesh].Count);
+				_vertices[_currentUsingMesh].Add (a.toVector ());
 			}
 
 			//b
-			if (!_voxelPointIndexTable[0].ContainsKey (b)) {
-				_voxelPointIndexTable[0].Add (b, _vertices[0].Count);
-				_vertices[0].Add (b.toVector ());
+			if (!_voxelPointIndexTable[_currentUsingMesh].ContainsKey (b)) {
+				_voxelPointIndexTable[_currentUsingMesh].Add (b, _vertices[_currentUsingMesh].Count);
+				_vertices[_currentUsingMesh].Add (b.toVector ());
 			}
 
 			//c
-			if (!_voxelPointIndexTable[0].ContainsKey (c)) {
-				_voxelPointIndexTable[0].Add (c, _vertices[0].Count);
-				_vertices[0].Add (c.toVector ());
+			if (!_voxelPointIndexTable[_currentUsingMesh].ContainsKey (c)) {
+				_voxelPointIndexTable[_currentUsingMesh].Add (c, _vertices[_currentUsingMesh].Count);
+				_vertices[_currentUsingMesh].Add (c.toVector ());
 			}
 
-			_triangles[0].Add (_voxelPointIndexTable[0] [a]);
-			_triangles[0].Add (_voxelPointIndexTable[0] [b]);
-			_triangles[0].Add (_voxelPointIndexTable[0] [c]);
+			_triangles[_currentUsingMesh].Add (_voxelPointIndexTable[_currentUsingMesh] [a]);
+			_triangles[_currentUsingMesh].Add (_voxelPointIndexTable[_currentUsingMesh] [b]);
+			_triangles[_currentUsingMesh].Add (_voxelPointIndexTable[_currentUsingMesh] [c]);
 		} else {
-			_triangles[0].Add (_vertices[0].Count);
-			_vertices[0].Add (a.toVector ());
+			_triangles[_currentUsingMesh].Add (_vertices[_currentUsingMesh].Count);
+			_vertices[_currentUsingMesh].Add (a.toVector ());
 		
-			_triangles[0].Add (_vertices[0].Count);
-			_vertices[0].Add (b.toVector ());
+			_triangles[_currentUsingMesh].Add (_vertices[_currentUsingMesh].Count);
+			_vertices[_currentUsingMesh].Add (b.toVector ());
 		
-			_triangles[0].Add (_vertices[0].Count);
-			_vertices[0].Add (c.toVector ());
+			_triangles[_currentUsingMesh].Add (_vertices[_currentUsingMesh].Count);
+			_vertices[_currentUsingMesh].Add (c.toVector ());
 		}
 	}
 
