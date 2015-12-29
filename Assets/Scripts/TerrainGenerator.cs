@@ -231,7 +231,7 @@ public class TerrainGenerator : MonoBehaviour {
 		caseValue = caseValue*2 + _voxels[x,y+1,h];//v4
 		caseValue = caseValue*2 + _voxels[x+1,y,h];//v3
 		caseValue = caseValue*2 + _voxels[x+1,y,h+1];//v2
-		caseValue = caseValue*2 + _voxels[x,y+1,h+1];//v1
+		caseValue = caseValue*2 + _voxels[x,y,h+1];//v1
 		caseValue = caseValue*2 + _voxels[x,y,h];//v0
 
 		int[,] caseTriangles = _marchingCubes.getCaseTriangles (caseValue);
@@ -320,6 +320,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
 	{
+		/*
 		//a
 		if (!_voxelPointIndexTable.ContainsKey (a)) {
 			_voxelPointIndexTable.Add(a, _vertices.Count);
@@ -341,6 +342,15 @@ public class TerrainGenerator : MonoBehaviour {
 		_triangles.Add (_voxelPointIndexTable [a]);
 		_triangles.Add (_voxelPointIndexTable [b]);
 		_triangles.Add (_voxelPointIndexTable [c]);
+		*/
+		_triangles.Add (_vertices.Count);
+		_vertices.Add (a.toVector ());
+		
+		_triangles.Add (_vertices.Count);
+		_vertices.Add (b.toVector ());
+		
+		_triangles.Add (_vertices.Count);
+		_vertices.Add (c.toVector ());
 	}
 
 	public void refreshHeightMap(){
@@ -373,21 +383,21 @@ public class TerrainGenerator : MonoBehaviour {
 //			}
 //		}
 
-		if (_voxels != null) {
-			for (int x = 0; x < _voxels.GetLength(0); x++) {
-				for (int y = 0; y < _voxels.GetLength(1); y++) {
-					for (int h = 0; h < _voxels.GetLength(2); h++) {
-
-						if (_voxels[x,y,h] == 1) {
-						Gizmos.color = Color.gray;
-						Vector3 pos = new Vector3(x*2, h*2, y*2);
-						Gizmos.DrawSphere(pos, 0.25f);
-						}
-					}
-				}
-			}
-
-		}
+//		if (_voxels != null) {
+//			for (int x = 0; x < _voxels.GetLength(0); x++) {
+//				for (int y = 0; y < _voxels.GetLength(1); y++) {
+//					for (int h = 0; h < _voxels.GetLength(2); h++) {
+//
+//						if (_voxels[x,y,h] == 1) {
+//						Gizmos.color = Color.gray;
+//						Vector3 pos = new Vector3(x*2, h*2, y*2);
+//						Gizmos.DrawSphere(pos, 0.25f);
+//						}
+//					}
+//				}
+//			}
+//
+//		}
 
 	}
 }
