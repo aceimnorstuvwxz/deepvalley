@@ -11,6 +11,7 @@ public class TerrainGenerator : MonoBehaviour {
 	public float init_height = 0f;
 	public float init_random_scope = 10f;
 	public string random_seed = "arisecbf";
+	public bool smooth_normal = false;
 
 	private float [,] _heightMap;
 	private float _minHeight;
@@ -21,6 +22,8 @@ public class TerrainGenerator : MonoBehaviour {
 	private Dictionary<VoxelNode, int> _voxelPointIndexTable; //vertic's index lookup
 	private List<Vector3> _vertices; //vertices
 	private List<int> _triangles; //index
+
+
 
 
 	class Hmp //height map point
@@ -320,37 +323,38 @@ public class TerrainGenerator : MonoBehaviour {
 
 	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
 	{
-		/*
-		//a
-		if (!_voxelPointIndexTable.ContainsKey (a)) {
-			_voxelPointIndexTable.Add(a, _vertices.Count);
-			_vertices.Add(a.toVector());
-		}
+		if (smooth_normal) {
+			//a
+			if (!_voxelPointIndexTable.ContainsKey (a)) {
+				_voxelPointIndexTable.Add (a, _vertices.Count);
+				_vertices.Add (a.toVector ());
+			}
 
-		//b
-		if (!_voxelPointIndexTable.ContainsKey (b)) {
-			_voxelPointIndexTable.Add(b, _vertices.Count);
-			_vertices.Add(b.toVector());
-		}
+			//b
+			if (!_voxelPointIndexTable.ContainsKey (b)) {
+				_voxelPointIndexTable.Add (b, _vertices.Count);
+				_vertices.Add (b.toVector ());
+			}
 
-		//c
-		if (!_voxelPointIndexTable.ContainsKey (c)) {
-			_voxelPointIndexTable.Add(c, _vertices.Count);
-			_vertices.Add(c.toVector());
-		}
+			//c
+			if (!_voxelPointIndexTable.ContainsKey (c)) {
+				_voxelPointIndexTable.Add (c, _vertices.Count);
+				_vertices.Add (c.toVector ());
+			}
 
-		_triangles.Add (_voxelPointIndexTable [a]);
-		_triangles.Add (_voxelPointIndexTable [b]);
-		_triangles.Add (_voxelPointIndexTable [c]);
-		*/
-		_triangles.Add (_vertices.Count);
-		_vertices.Add (a.toVector ());
+			_triangles.Add (_voxelPointIndexTable [a]);
+			_triangles.Add (_voxelPointIndexTable [b]);
+			_triangles.Add (_voxelPointIndexTable [c]);
+		} else {
+			_triangles.Add (_vertices.Count);
+			_vertices.Add (a.toVector ());
 		
-		_triangles.Add (_vertices.Count);
-		_vertices.Add (b.toVector ());
+			_triangles.Add (_vertices.Count);
+			_vertices.Add (b.toVector ());
 		
-		_triangles.Add (_vertices.Count);
-		_vertices.Add (c.toVector ());
+			_triangles.Add (_vertices.Count);
+			_vertices.Add (c.toVector ());
+		}
 	}
 
 	public void refreshHeightMap(){
