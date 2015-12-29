@@ -81,7 +81,8 @@ public class TerrainGenerator : MonoBehaviour {
 		_heightMap [width - 1,0] = init_height;
 		_heightMap [width - 1,width - 1] = init_height;
 
-		_minHeight = _maxHeight = 0;
+		_minHeight = 100000;
+		_maxHeight = -100000;
 
 
 		int currentStep = width - 1;
@@ -188,6 +189,7 @@ public class TerrainGenerator : MonoBehaviour {
 				int height = (int)(v-_minHeight);
 				for (int i = 0; i < voxelHeight; i++) {
 					_voxels[x,y,i] = (i <= height) ? 1 : 0;
+
 				}
 			}
 		}
@@ -357,18 +359,34 @@ public class TerrainGenerator : MonoBehaviour {
 	}
 
 	void OnDrawGizmos() {
-		if (_heightMap != null) {
-			int width = _heightMap.GetLength (0);
-			int height = width;
-			for (int x = 0; x < width; x ++) {
-				for (int y = 0; y < height; y ++) {
-					float v = getHmpv(new Hmp(x,y));
-//					Debug.Log("v"+v.ToString());
-					Gizmos.color = new Color((v+5)/10f,1-(v+5)/10f,0,1);
-					Vector3 pos = new Vector3(-width/2 + x + .5f, v, -height/2 + y+.5f);
-					Gizmos.DrawCube(pos,Vector3.one/2f);
+//		if (_heightMap != null) {
+//			int width = _heightMap.GetLength (0);
+//			int height = width;
+//			for (int x = 0; x < width; x ++) {
+//				for (int y = 0; y < height; y ++) {
+//					float v = getHmpv(new Hmp(x,y));
+////					Debug.Log("v"+v.ToString());
+//					Gizmos.color = new Color((v+5)/10f,1-(v+5)/10f,0,1);
+//					Vector3 pos = new Vector3(-width/2 + x + .5f, v, -height/2 + y+.5f);
+//					Gizmos.DrawCube(pos,Vector3.one/2f);
+//				}
+//			}
+//		}
+
+		if (_voxels != null) {
+			for (int x = 0; x < _voxels.GetLength(0); x++) {
+				for (int y = 0; y < _voxels.GetLength(1); y++) {
+					for (int h = 0; h < _voxels.GetLength(2); h++) {
+
+						if (_voxels[x,y,h] == 1) {
+						Gizmos.color = Color.gray;
+						Vector3 pos = new Vector3(x*2, h*2, y*2);
+						Gizmos.DrawSphere(pos, 0.25f);
+						}
+					}
 				}
 			}
+
 		}
 
 	}
