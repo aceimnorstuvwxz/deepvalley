@@ -6,6 +6,8 @@ using System.Collections.Generic;
 // as the terrain self
 public class TerrainGenerator : MonoBehaviour {
 
+	public GameObject terrainFab;
+
 	public int width_para_n = 5; //2^N + 1 per edge
 	public float reduce_rate = 0.7f; //random value scope reduce radio
 	public float init_height = 0f;
@@ -25,6 +27,7 @@ public class TerrainGenerator : MonoBehaviour {
 	private List<int>[] _triangles; //index
 
 	private MeshFilter[] _meshFilters;
+	private GameObject[] _childGameObjets;
 
 
 
@@ -378,10 +381,10 @@ public class TerrainGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_meshFilters = new MeshFilter[mesh_count];
+		_childGameObjets = new GameObject[mesh_count];
 		for (int i = 0; i < mesh_count; i++) {
-			MeshFilter mf = gameObject.AddComponent<MeshFilter>();
-			_meshFilters[i] = mf;
-			Debug.Assert(_meshFilters[i] != null);
+			_childGameObjets[i] = (GameObject)Instantiate(terrainFab, transform.position, transform.rotation);
+			_meshFilters[i] = _childGameObjets[i].GetComponent<MeshFilter>();
 		}
 	}
 	

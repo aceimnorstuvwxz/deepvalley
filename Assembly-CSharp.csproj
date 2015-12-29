@@ -46,28 +46,22 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\IsolateRadar\RadarController.cs" />
+     <Compile Include="Assets\IsolateTerrain\MarchingCubes.cs" />
+     <Compile Include="Assets\IsolateTerrain\TerrainGenerator.cs" />
      <Compile Include="Assets\Scripts\CannonController.cs" />
      <Compile Include="Assets\Scripts\Gizmo.cs" />
      <Compile Include="Assets\Scripts\MapGenerator.cs" />
-     <Compile Include="Assets\Scripts\MarchingCubes.cs" />
      <Compile Include="Assets\Scripts\MeshGenerator.cs" />
      <Compile Include="Assets\Scripts\ScopeSwitcher.cs" />
-     <Compile Include="Assets\Scripts\TerrainGenerator.cs" />
      <Compile Include="Assets\Scripts\UIController.cs" />
      <Compile Include="Assets\Scripts\joycontroller.cs" />
      <None Include="Assets\Shaders\custom_mobile_particle_vertexlit.shader" />
      <None Include="Assets\Shaders\NewUnlitShader.shader" />
- <Reference Include="UnityEngine.Analytics">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
