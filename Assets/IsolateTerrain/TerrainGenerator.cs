@@ -22,16 +22,13 @@ public class TerrainGenerator : MonoBehaviour {
 	private int[,,] _voxels; // 0 -empty 1-fill, convient for bit shift in case matching
 	private System.Random _randomGen;
 
-	private Dictionary<VoxelNode, int>[] _voxelPointIndexTable; //vertic's index lookup
-	private List<Vector3>[] _vertices; //vertices
-	private List<int>[] _triangles; //index
+	private Dictionary<VoxelNode, int> _voxelPointIndexTable; //vertic's index lookup
+	private List<Vector3> _vertices; //vertices
+	private List<int> _triangles; //index
 
-	private MeshFilter[] _meshFilters;
-	private GameObject[] _childGameObjets;
-	private int _currentUsingMesh;
-
-
-
+	private List<GameObject> _childTerrains;
+	private GameObject _currentChildTerrain;
+	private MeshFilter _currentMeshFilter;
 
 	class Hmp //height map point
 	{
@@ -206,17 +203,6 @@ public class TerrainGenerator : MonoBehaviour {
 
 
 		//marching cubes
-		_currentUsingMesh = 0;
-		_voxelPointIndexTable = new Dictionary<VoxelNode, int> [mesh_count];
-		_vertices = new List<Vector3>[mesh_count];
-		_triangles = new List<int>[mesh_count];
-
-		for (int i = 0; i < mesh_count; i++) {
-			_voxelPointIndexTable[i] = new Dictionary<VoxelNode, int>(new VoxelNode.EqualityComparer());
-			_vertices[i] = new List<Vector3> ();
-			_triangles[i] = new List<int> ();
-		}
-
 		for (int y = 0; y < _voxels.GetLength(1)-1; y++) {
 			for (int x = 0; x < _voxels.GetLength(0)-1; x++) {
 				for (int h = 0; h < _voxels.GetLength(2)-1; h++) {
@@ -225,19 +211,7 @@ public class TerrainGenerator : MonoBehaviour {
 			}
 		}
 
-
-
-		for (int i = 0; i < mesh_count; i++) {
-			
-			Debug.Log ("vertices count = " + _vertices[i].Count.ToString ());
-			Debug.Log ("triangle count = " + (_triangles[i].Count / 3).ToString ());
-
-			Mesh mesh = new Mesh();
-			_meshFilters[i].mesh = mesh;
-			mesh.vertices = _vertices[i].ToArray();
-			mesh.triangles = _triangles[i].ToArray();
-			mesh.RecalculateNormals();
-		}
+		setCurrentMeshFilter ();
 	}
 
 	private MarchingCubes _marchingCubes  = new MarchingCubes();
@@ -340,41 +314,40 @@ public class TerrainGenerator : MonoBehaviour {
 
 	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
 	{
-		if (_vertices [_currentUsingMesh].Count > 64990) {
-			_currentUsingMesh++;
-			Debug.Assert(_currentUsingMesh < mesh_count);
+		if (_vertices.Count > 64990) {
+			nextChildMesh();
 		}
 		if (smooth_normal) {
 			//a
-			if (!_voxelPointIndexTable[_currentUsingMesh].ContainsKey (a)) {
-				_voxelPointIndexTable[_currentUsingMesh].Add (a, _vertices[_currentUsingMesh].Count);
-				_vertices[_currentUsingMesh].Add (a.toVector ());
+			if (!_voxelPointIndexTable.ContainsKey (a)) {
+				_voxelPointIndexTable.Add (a, _vertices.Count);
+				_vertices.Add (a.toVector ());
 			}
 
 			//b
-			if (!_voxelPointIndexTable[_currentUsingMesh].ContainsKey (b)) {
-				_voxelPointIndexTable[_currentUsingMesh].Add (b, _vertices[_currentUsingMesh].Count);
-				_vertices[_currentUsingMesh].Add (b.toVector ());
+			if (!_voxelPointIndexTable.ContainsKey (b)) {
+				_voxelPointIndexTable.Add (b, _vertices.Count);
+				_vertices.Add (b.toVector ());
 			}
 
 			//c
-			if (!_voxelPointIndexTable[_currentUsingMesh].ContainsKey (c)) {
-				_voxelPointIndexTable[_currentUsingMesh].Add (c, _vertices[_currentUsingMesh].Count);
-				_vertices[_currentUsingMesh].Add (c.toVector ());
+			if (!_voxelPointIndexTable.ContainsKey (c)) {
+				_voxelPointIndexTable.Add (c, _vertices.Count);
+				_vertices.Add (c.toVector ());
 			}
-
-			_triangles[_currentUsingMesh].Add (_voxelPointIndexTable[_currentUsingMesh] [a]);
-			_triangles[_currentUsingMesh].Add (_voxelPointIndexTable[_currentUsingMesh] [b]);
-			_triangles[_currentUsingMesh].Add (_voxelPointIndexTable[_currentUsingMesh] [c]);
+			_triangles.Add (_voxelPointIndexTable [a]);
+			_triangles.Add (_voxelPointIndexTable [b]);
+			_triangles.Add (_voxelPointIndexTable [c]);
 		} else {
-			_triangles[_currentUsingMesh].Add (_vertices[_currentUsingMesh].Count);
-			_vertices[_currentUsingMesh].Add (a.toVector ());
+			_triangles.Add (_vertices.Count);
+			_vertices.Add (a.toVector ());
+			
+			_triangles.Add (_vertices.Count);
+			_vertices.Add (b.toVector ());
+			
+			_triangles.Add (_vertices.Count);
+			_vertices.Add (c.toVector ());
 		
-			_triangles[_currentUsingMesh].Add (_vertices[_currentUsingMesh].Count);
-			_vertices[_currentUsingMesh].Add (b.toVector ());
-		
-			_triangles[_currentUsingMesh].Add (_vertices[_currentUsingMesh].Count);
-			_vertices[_currentUsingMesh].Add (c.toVector ());
 		}
 	}
 
@@ -383,14 +356,37 @@ public class TerrainGenerator : MonoBehaviour {
 		generateVoxelMesh ();
 	}
 
+
+	void nextChildMesh(){
+		setCurrentMeshFilter ();
+
+		_voxelPointIndexTable = new Dictionary<VoxelNode, int> ();
+		_vertices = new List<Vector3> ();
+		_triangles = new List<int> ();
+
+
+		_currentChildTerrain = (GameObject)Instantiate(terrainFab, transform.position, transform.rotation);
+		_currentMeshFilter = _currentChildTerrain.GetComponent<MeshFilter> ();
+		_childTerrains.Add (_currentChildTerrain);
+	}
+
+	void setCurrentMeshFilter(){
+		if (_currentMeshFilter != null) {
+			Mesh mesh = new Mesh();
+			_currentMeshFilter.mesh = mesh;
+			mesh.vertices = _vertices.ToArray();
+			mesh.triangles = _triangles.ToArray();
+			mesh.RecalculateNormals();
+			
+			Debug.Log ("TerrainFab vertices = " + _vertices.Count.ToString());
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
-		_meshFilters = new MeshFilter[mesh_count];
-		_childGameObjets = new GameObject[mesh_count];
-		for (int i = 0; i < mesh_count; i++) {
-			_childGameObjets[i] = (GameObject)Instantiate(terrainFab, transform.position, transform.rotation);
-			_meshFilters[i] = _childGameObjets[i].GetComponent<MeshFilter>();
-		}
+		_childTerrains = new List<GameObject> ();
+		
+		nextChildMesh ();
 	}
 	
 	// Update is called once per frame
