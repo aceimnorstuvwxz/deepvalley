@@ -365,7 +365,8 @@ public class TerrainGenerator : MonoBehaviour {
 		_triangles = new List<int> ();
 
 
-		_currentChildTerrain = (GameObject)Instantiate(terrainFab, transform.position, transform.rotation);
+		_currentChildTerrain = (GameObject)Instantiate(terrainFab, Vector3.zero, Quaternion.identity);
+		_currentChildTerrain.transform.parent = gameObject.transform;
 		_currentMeshFilter = _currentChildTerrain.GetComponent<MeshFilter> ();
 		_childTerrains.Add (_currentChildTerrain);
 	}
