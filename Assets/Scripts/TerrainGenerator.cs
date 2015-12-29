@@ -178,7 +178,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 		//new voxels
 		float totalHeight = (_maxHeight - _minHeight);
-		int voxelHeight = (int)totalHeight + 2;
+		int voxelHeight = (int)totalHeight + 3;
 		int width = _heightMap.GetLength (0);
 		_voxels = new int[width,width,voxelHeight]; // x,y,height
 
@@ -315,7 +315,7 @@ public class TerrainGenerator : MonoBehaviour {
 			break;
 		}
 
-		return new VoxelNode (originX * 2 + dx, originY * 2 + dy, originH + dh);
+		return new VoxelNode (originX * 2 + dx, originY * 2 + dy, originH * 2 + dh);
 	}
 
 	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
