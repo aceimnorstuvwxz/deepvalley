@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 // as the terrain self
 public class TerrainGenerator : MonoBehaviour {
@@ -16,6 +18,8 @@ public class TerrainGenerator : MonoBehaviour {
 	private bool[,,] _voxels;
 	private System.Random _randomGen;
 
+	private Dictionary<VoxelNode, int> _voxelPointIndexTable;
+
 
 	class Hmp //height map point
 	{
@@ -27,6 +31,32 @@ public class TerrainGenerator : MonoBehaviour {
 		public int x;
 		public int y;
 	}
+
+	class VoxelNode
+	{
+		public int x;
+		public int y;
+		public int h;
+
+		public VoxelNode(int x, int y, int h) {
+			this.x = x;
+			this.y = y;
+			this.h = h;
+		}
+		public class EqualityComparer : IEqualityComparer<VoxelNode> {
+			
+			public bool Equals(VoxelNode a, VoxelNode b) {
+				return a.x == b.x && a.y == b.y && a.h == b.h;
+			}
+			
+			public int GetHashCode(VoxelNode a) {
+				int c = a.x ^ a.y ^ a.h;
+				return c.GetHashCode();
+			}
+		}
+	}
+
+
 
 	void generateHeightMap()
 	{
@@ -157,6 +187,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 
 		//marching cubes
+		_voxelPointIndexTable = new Dictionary<VoxelNode, int> (new VoxelNode.EqualityComparer ());
 
 	}
 
