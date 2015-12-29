@@ -15,10 +15,12 @@ public class TerrainGenerator : MonoBehaviour {
 	private float [,] _heightMap;
 	private float _minHeight;
 	private float _maxHeight;
-	private bool[,,] _voxels;
+	private int[,,] _voxels; // 0 -empty 1-fill, convient for bit shift in case matching
 	private System.Random _randomGen;
 
-	private Dictionary<VoxelNode, int> _voxelPointIndexTable;
+	private Dictionary<VoxelNode, int> _voxelPointIndexTable; //vertic's index lookup
+	private List<Vector3> _vertices; //vertices
+	private List<int> _triangles; //index
 
 
 	class Hmp //height map point
@@ -53,6 +55,11 @@ public class TerrainGenerator : MonoBehaviour {
 				int c = a.x ^ a.y ^ a.h;
 				return c.GetHashCode();
 			}
+		}
+
+		public Vector3 toVector()
+		{
+			return new Vector3 ((float)x, (float)h, (float)y); //to Unity's axises
 		}
 	}
 
@@ -172,7 +179,7 @@ public class TerrainGenerator : MonoBehaviour {
 		float totalHeight = (_maxHeight - _minHeight);
 		int voxelHeight = (int)totalHeight + 1;
 		int width = _heightMap.GetLength (0);
-		_voxels = new bool[width,width,voxelHeight]; // x,y,height
+		_voxels = new int[width,width,voxelHeight]; // x,y,height
 
 		//heightmap to voxels
 		for (int y = 0; y < width; y++) {
@@ -180,7 +187,7 @@ public class TerrainGenerator : MonoBehaviour {
 				float v = getHmpv(new Hmp(x,y));
 				int height = (int)(v-_minHeight);
 				for (int i = 0; i < voxelHeight; i++) {
-					_voxels[x,y,i] = (i <= height);
+					_voxels[x,y,i] = (i <= height) ? 1 : 0;
 				}
 			}
 		}
@@ -188,7 +195,143 @@ public class TerrainGenerator : MonoBehaviour {
 
 		//marching cubes
 		_voxelPointIndexTable = new Dictionary<VoxelNode, int> (new VoxelNode.EqualityComparer ());
+		_vertices = new List<Vector3> ();
+		_triangles = new List<int> ();
 
+		for (int h = 0; h < _voxels.GetLength(2)-1; h++) {
+			for (int y = 0; y < _voxels.GetLength(1)-1; y++) {
+				for (int x = 0; x < _voxels.GetLength(0)-1; x++) {
+					marchPerCube(x,y,h);
+				}
+			}
+		}
+
+		Debug.Log ("vertices count = " + _vertices.Count.ToString ());
+		Debug.Log ("triangle count = " + (_triangles.Count / 3).ToString ());
+
+	}
+
+	private MarchingCubes _marchingCubes  = new MarchingCubes();
+	void marchPerCube(int x, int y, int h)
+	{
+		int caseValue = 0;
+
+		caseValue = caseValue*2 + _voxels[x+1,y+1,h];//v7
+		caseValue = caseValue*2 + _voxels[x+1,y+1,h+1];//v6
+		caseValue = caseValue*2 + _voxels[x,y+1,h+1];//v5
+		caseValue = caseValue*2 + _voxels[x,y+1,h];//v4
+		caseValue = caseValue*2 + _voxels[x+1,y,h];//v3
+		caseValue = caseValue*2 + _voxels[x+1,y,h+1];//v2
+		caseValue = caseValue*2 + _voxels[x,y+1,h+1];//v1
+		caseValue = caseValue*2 + _voxels[x,y,h];//v0
+
+		int[,] caseTriangles = _marchingCubes.getCaseTriangles (caseValue);
+		for (int i = 0; i < caseTriangles.GetLength(0); i++) {
+			int edgeA = caseTriangles[i,0];
+			int edgeB = caseTriangles[i,1];
+			int edgeC = caseTriangles[i,2];
+
+			addTriangle(edge2voxelNode(edgeA, x, y, h), edge2voxelNode(edgeB, x, y, h), edge2voxelNode(edgeC, x, y, h));
+		}
+	}
+
+	VoxelNode edge2voxelNode(int edgeNumber, int originX, int originY, int originH) {
+		int dx;
+		int dy;
+		int dh;
+		dx = dy = dh = 0;
+		switch (edgeNumber) {
+		case 0:
+			dx = 0;
+			dy = 0;
+			dh = 1;
+			break;
+		case 1:
+			dx = 1;
+			dy = 0;
+			dh = 2;
+			break;
+		case 2:
+			dx = 2;
+			dy = 0;
+			dh = 1;
+			break;
+		case 3:
+			dx = 1;
+			dy = 0;
+			dh = 0;
+			break;
+		case 4:
+			dx = 0;
+			dy = 2;
+			dh = 1;
+			break;
+		case 5:
+			dx = 1;
+			dy = 2;
+			dh = 2;
+			break;
+		case 6:
+			dx = 2;
+			dy = 2;
+			dh = 1;
+			break;
+		case 7:
+			dx = 1;
+			dy = 2;
+			dh = 0;
+			break;
+		case 8:
+			dx = 0;
+			dy = 1;
+			dh = 0;
+			break;
+		case 9:
+			dx = 0;
+			dy = 1;
+			dh = 2;
+			break;
+		case 10:
+			dx = 2;
+			dy = 1;
+			dh = 2;
+			break;
+		case 11:
+			dx = 2;
+			dy = 1;
+			dh = 0;
+			break;
+		default:
+			Debug.Assert(false);
+			break;
+		}
+
+		return new VoxelNode (originX * 2 + dx, originY * 2 + dy, originH + dh);
+	}
+
+	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
+	{
+		//a
+		if (!_voxelPointIndexTable.ContainsKey (a)) {
+			_voxelPointIndexTable.Add(a, _vertices.Count);
+			_vertices.Add(a.toVector());
+		}
+
+		//b
+		if (!_voxelPointIndexTable.ContainsKey (b)) {
+			_voxelPointIndexTable.Add(b, _vertices.Count);
+			_vertices.Add(b.toVector());
+		}
+
+		//c
+		if (!_voxelPointIndexTable.ContainsKey (c)) {
+			_voxelPointIndexTable.Add(c, _vertices.Count);
+			_vertices.Add(c.toVector());
+		}
+
+		_triangles.Add (_voxelPointIndexTable [a]);
+		_triangles.Add (_voxelPointIndexTable [b]);
+		_triangles.Add (_voxelPointIndexTable [c]);
 	}
 
 	public void refreshHeightMap(){

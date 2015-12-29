@@ -1,8 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MarchingCubes : MonoBehaviour {
+public class MarchingCubes {
 	// Marching Cubes case table according to GPU gems 3 chapter1 !
+	
+	public int[,] getCaseTriangles(int caseValue) {
+		int number = case_to_numpolys [caseValue];
+		int[,] ret = new int[number, 3];
+		
+		for (int i = 0; i < number; i++) {
+			for (int j = 0; j < 3; j++) {
+				int v = edge_connect_list[caseValue*5*4 + i*4 + j];
+				ret[i,j] = v;
+			}
+		}
+		return ret;
+	}
 
 	private int[] case_to_numpolys = new int[256]{
 		0 , 1 , 1 , 2 , 1 , 2 , 2 , 3 , 1 , 2 , 2 , 3 , 2 , 3 , 3 , 2 , 1 , 2 , 2 , 3 , 2 , 3 , 3 , 4 , 2 , 3 , 3 , 4 , 3 , 4 , 4 , 3 ,
@@ -14,6 +27,7 @@ public class MarchingCubes : MonoBehaviour {
 		2 , 3 , 3 , 4 , 3 , 4 , 4 , 5 , 3 , 4 , 4 , 5 , 2 , 3 , 3 , 2 , 3 , 4 , 4 , 5 , 4 , 5 , 5 , 2 , 4 , 3 , 5 , 4 , 3 , 2 , 4 , 1 ,
 		3 , 4 , 4 , 5 , 4 , 5 , 3 , 4 , 4 , 5 , 5 , 2 , 3 , 4 , 2 , 1 , 2 , 3 , 3 , 2 , 3 , 4 , 2 , 1 , 3 , 2 , 4 , 1 , 2 , 1 , 1 , 0 ,
 	};
+
 
 	private int[] edge_connect_list = new int[256*5*4]{
 		-1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 
@@ -275,13 +289,5 @@ public class MarchingCubes : MonoBehaviour {
 	};
 
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
