@@ -14,7 +14,6 @@ public class TerrainGenerator : MonoBehaviour {
 	public float init_random_scope = 10f;
 	public string random_seed = "arisecbf";
 	public bool smooth_normal = false;
-	public int mesh_count = 1;
 
 	private float [,] _heightMap;
 	private float _minHeight;
@@ -366,7 +365,7 @@ public class TerrainGenerator : MonoBehaviour {
 		}
 	}
 
-	public void refreshHeightMap(){
+	public void generateTerrain(){
 		generateHeightMap ();
 		generateVoxelMesh ();
 	}
@@ -405,6 +404,8 @@ public class TerrainGenerator : MonoBehaviour {
 		_childTerrains = new List<GameObject> ();
 		
 		nextChildMesh ();
+
+		generateTerrain ();
 	}
 	
 	// Update is called once per frame
