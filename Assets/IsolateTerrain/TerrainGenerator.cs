@@ -24,6 +24,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	private Dictionary<VoxelNode, int> _voxelPointIndexTable; //vertic's index lookup
 	private List<Vector3> _vertices; //vertices
+	private List<Vector2> _uvs;
 	private List<int> _triangles; //index
 
 	private List<GameObject> _childTerrains;
@@ -68,6 +69,14 @@ public class TerrainGenerator : MonoBehaviour {
 		{
 			return new Vector3 ((float)x, (float)h, (float)y); //to Unity's axises
 		}
+
+		public Vector2 toUV(int width, int hMax)
+		{
+			float v = h * 1.0f / hMax;
+			float u = x * 1.0f / width;
+			return new Vector2 (u, v);
+		}
+
 	}
 
 
@@ -312,6 +321,11 @@ public class TerrainGenerator : MonoBehaviour {
 		return new VoxelNode (originX * 2 + dx, originY * 2 + dy, originH * 2 + dh);
 	}
 
+	void addVertex(VoxelNode node) {
+		_vertices.Add (node.toVector ());
+		_uvs.Add (node.toUV (_voxels.GetLength(0), _voxels.GetLength(2)));
+	}
+
 	void addTriangle(VoxelNode a, VoxelNode b, VoxelNode c)
 	{
 		if (_vertices.Count > 64990) {
@@ -321,33 +335,34 @@ public class TerrainGenerator : MonoBehaviour {
 			//a
 			if (!_voxelPointIndexTable.ContainsKey (a)) {
 				_voxelPointIndexTable.Add (a, _vertices.Count);
-				_vertices.Add (a.toVector ());
+				addVertex(a);
 			}
 
 			//b
 			if (!_voxelPointIndexTable.ContainsKey (b)) {
 				_voxelPointIndexTable.Add (b, _vertices.Count);
-				_vertices.Add (b.toVector ());
+				addVertex(b);
+
 			}
 
 			//c
 			if (!_voxelPointIndexTable.ContainsKey (c)) {
 				_voxelPointIndexTable.Add (c, _vertices.Count);
-				_vertices.Add (c.toVector ());
+				addVertex(c);
+
 			}
 			_triangles.Add (_voxelPointIndexTable [a]);
 			_triangles.Add (_voxelPointIndexTable [b]);
 			_triangles.Add (_voxelPointIndexTable [c]);
 		} else {
 			_triangles.Add (_vertices.Count);
-			_vertices.Add (a.toVector ());
+			addVertex(a);
 			
 			_triangles.Add (_vertices.Count);
-			_vertices.Add (b.toVector ());
+			addVertex(b);
 			
 			_triangles.Add (_vertices.Count);
-			_vertices.Add (c.toVector ());
-		
+			addVertex(c);
 		}
 	}
 
@@ -363,6 +378,7 @@ public class TerrainGenerator : MonoBehaviour {
 		_voxelPointIndexTable = new Dictionary<VoxelNode, int> ();
 		_vertices = new List<Vector3> ();
 		_triangles = new List<int> ();
+		_uvs = new List<Vector2> ();
 
 
 		_currentChildTerrain = (GameObject)Instantiate(terrainFab, Vector3.zero, Quaternion.identity);
@@ -377,6 +393,7 @@ public class TerrainGenerator : MonoBehaviour {
 			_currentMeshFilter.mesh = mesh;
 			mesh.vertices = _vertices.ToArray();
 			mesh.triangles = _triangles.ToArray();
+			mesh.uv = _uvs.ToArray();
 			mesh.RecalculateNormals();
 			
 			Debug.Log ("TerrainFab vertices = " + _vertices.Count.ToString());
