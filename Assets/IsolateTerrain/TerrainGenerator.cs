@@ -365,6 +365,7 @@ public class TerrainGenerator : MonoBehaviour {
 		}
 	}
 
+	// call this by outer to generate the terrain, time costly!
 	public void generateTerrain(){
 		generateHeightMap ();
 		generateVoxelMesh ();
@@ -404,8 +405,6 @@ public class TerrainGenerator : MonoBehaviour {
 		_childTerrains = new List<GameObject> ();
 		
 		nextChildMesh ();
-
-		generateTerrain ();
 	}
 	
 	// Update is called once per frame

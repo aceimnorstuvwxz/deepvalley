@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class UIController : MonoBehaviour {
+	public float load_interval = 1.0f;
 
 	public Image fenhua_open;
 	public Image fenhua_pos1;
@@ -26,7 +27,6 @@ public class UIController : MonoBehaviour {
 		float alphaOfSecond = radio > 0.5f ? (1f - Mathf.Abs (radio - 1f) / 0.5f) : 0f;
 		fenhua_pos1.color = new Color (1, 1, 1, alphaOfSecond);
 
-		// camera position
 	}
 
 }
