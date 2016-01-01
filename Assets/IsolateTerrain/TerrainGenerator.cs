@@ -80,7 +80,7 @@ public class TerrainGenerator : MonoBehaviour {
 	}
 
 
-
+	private bool _flagCenterDown = true;
 	void generateHeightMap()
 	{
 		_randomGen = new System.Random(random_seed.GetHashCode());
@@ -102,6 +102,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 
 		int currentStep = width - 1;
+		_flagCenterDown = true;
 		float currentRandomScope = init_random_scope;
 		for (int i = 0; i < width_para_n; i++) {
 			for (int x = 0; x < width-1; x += currentStep) {
@@ -144,7 +145,9 @@ public class TerrainGenerator : MonoBehaviour {
 		int centerX = (lb.x + rt.x) / 2;
 		int centerY = (lb.y + rt.y) / 2;
 		Hmp center = new Hmp (centerX, centerY);
-		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + (float)((_randomGen.NextDouble()-0.5)*2)*randomScope;
+		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + 
+			(_flagCenterDown ? -((float)(_randomGen.NextDouble())*randomScope) : (float)((_randomGen.NextDouble()-0.5)*2)*randomScope);
+		_flagCenterDown = false;
 		setHmpv (center, centerValue);
 
 		/*
@@ -414,7 +417,16 @@ public class TerrainGenerator : MonoBehaviour {
 	// get deepest position
 	public Vector3 getValleyPosition()
 	{
-		return new Vector3(_minHeightPosition.x * 2f, 0, _minHeightPosition.y*2f);
+		int center = _voxels.GetLength (0)/2;
+		int h = 0;
+		for (;; h++) {
+			if (_voxels[center,center,h] == 0 )
+			{
+				break;
+			}
+		}
+		h += 3;
+		return new Vector3(center * 2f, h*2f, center*2f);
 	}
 	
 	// Update is called once per frame
