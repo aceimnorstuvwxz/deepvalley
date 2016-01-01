@@ -428,6 +428,16 @@ public class TerrainGenerator : MonoBehaviour {
 		h += 3;
 		return new Vector3(center * 2f, h*2f, center*2f);
 	}
+
+	public Vector3 nextFlyingPosition()
+	{
+		return new Vector3 (100f, 40f, 118f);
+	}
+
+	public Vector3 nextFlyingDirection()
+	{
+		return new Vector3(1,0,0);
+	}
 	
 	// Update is called once per frame
 	void Update () {

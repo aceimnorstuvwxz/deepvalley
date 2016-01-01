@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class MainController : MonoBehaviour {
 	public float delay_generate_terrain = 0.5f;
-	public float flying_scale = 3f;
 
 	private int _currentLevel;
 	private string[] _randomSeedMap;
@@ -60,9 +59,6 @@ public class MainController : MonoBehaviour {
 		string flyName = _flyingNamesGen.getRandomFlyingName ();
 		Debug.Log ("Add flying:"+flyName);
 		GameObject obj = Instantiate( Resources.Load(flyName) )as GameObject;
-		obj.transform.position  = new Vector3(72,28,120);
-
-		obj.transform.localScale = new Vector3 (flying_scale,flying_scale,flying_scale);
 		obj.transform.parent = _goFlyings.transform;
 		AFlyingController flyCon = obj.AddComponent<AFlyingController>() as AFlyingController;
 		_flyings.Add (obj);
