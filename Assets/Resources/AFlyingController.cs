@@ -14,6 +14,12 @@ public class AFlyingController : MonoBehaviour {
 	private float _maxSpeed = 1f;
 	private Vector3 _direction;
 
+	private int _id;
+
+	public void setId(int id) {
+		_id = id;
+	}
+
 	void Start () {
 
 		_terrainGenerator = GameObject.Find ("Terrain").GetComponent<TerrainGenerator> ();

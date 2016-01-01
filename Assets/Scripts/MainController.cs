@@ -35,12 +35,14 @@ public class MainController : MonoBehaviour {
 	}
 
 	System.Random _flyingRandomGen;
-	List<GameObject> _flyings;
+//	List<GameObject> _flyings;
 	AFlyingNames _flyingNamesGen = new AFlyingNames();
+	int _idIndex = 0;
 	void StartAddFlying()
 	{
 		string	seed = Time.time.ToString();
-		_flyings = new List<GameObject> ();
+//		_flyings = new List<GameObject> ();
+		_idIndex = 0;
 		
 		_flyingRandomGen = new System.Random(seed.GetHashCode());
 		StartCoroutine ("AddingFlyings");
@@ -57,11 +59,13 @@ public class MainController : MonoBehaviour {
 
 	void AddOneFlying() {
 		string flyName = _flyingNamesGen.getRandomFlyingName ();
-		Debug.Log ("Add flying:"+flyName);
+		int id = _idIndex++;
+		Debug.Log ("Add flying:"+flyName+"  id:"+id.ToString());
 		GameObject obj = Instantiate( Resources.Load(flyName) )as GameObject;
 		obj.transform.parent = _goFlyings.transform;
 		AFlyingController flyCon = obj.AddComponent<AFlyingController>() as AFlyingController;
-		_flyings.Add (obj);
+		flyCon.setId (id);
+//		_flyings.Add (obj);
 	}
 
 	/*
