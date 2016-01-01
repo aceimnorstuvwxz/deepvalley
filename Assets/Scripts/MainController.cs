@@ -23,15 +23,17 @@ public class MainController : MonoBehaviour {
 
 		_terrainGenerator = GetComponent<TerrainGenerator> ();
 		_terrainGenerator.random_seed = randomSeed;
-
-		Invoke ("beginGenerateTerrain", delay_generate_terrain);
+		
+		_terrainGenerator.generateTerrain ();
+//		Invoke ("beginGenerateTerrain", 0);
 	}
 
+	/*
 	void beginGenerateTerrain()
 	{
 		Debug.Log ("beginGenerateTerrain");
 		_terrainGenerator.generateTerrain ();
-	}
+	}*/
 	
 	// Update is called once per frame
 	void Update () {
