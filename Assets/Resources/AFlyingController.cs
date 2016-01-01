@@ -7,7 +7,6 @@ public class AFlyingController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("flying start");
 	
 	}
 	
