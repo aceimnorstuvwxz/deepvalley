@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MainController : MonoBehaviour {
 	public float delay_generate_terrain = 0.5f;
@@ -8,6 +9,7 @@ public class MainController : MonoBehaviour {
 	private string[] _randomSeedMap;
 
 	private TerrainGenerator _terrainGenerator;
+	private GameObject _goFlyings;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +28,39 @@ public class MainController : MonoBehaviour {
 		
 		_terrainGenerator.generateTerrain ();
 //		Invoke ("beginGenerateTerrain", 0);
+
+		_goFlyings = GameObject.Find ("Flyings");
+
+		Invoke ("StartAddFlying", 3);
+	}
+
+	System.Random _flyingRandomGen;
+	List<GameObject> _flyings;
+	void StartAddFlying()
+	{
+		string	seed = Time.time.ToString();
+		_flyings = new List<GameObject> ();
+		
+		_flyingRandomGen = new System.Random(seed.GetHashCode());
+		StartCoroutine ("AddingFlyings");
+	}
+
+	IEnumerator AddingFlyings() {
+		for (;;) {
+			AddOneFlying();
+			yield return new WaitForSeconds(_flyingRandomGen.Next(1,5)*1f);
+		}
+	}
+
+
+
+	void AddOneFlying() {
+		Debug.Log ("add flying...");
+		GameObject obj = Instantiate( Resources.Load("BabyDuck") )as GameObject;
+		obj.transform.position  = new Vector3(72,28,120);
+		obj.transform.localScale = new Vector3 (100, 100, 100);
+		obj.transform.parent = _goFlyings.transform;
+		_flyings.Add (obj);
 	}
 
 	/*

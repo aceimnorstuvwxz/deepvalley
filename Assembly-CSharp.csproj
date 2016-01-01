@@ -48,6 +48,7 @@
      <Compile Include="Assets\IsolateRadar\RadarController.cs" />
      <Compile Include="Assets\IsolateTerrain\MarchingCubes.cs" />
      <Compile Include="Assets\IsolateTerrain\TerrainGenerator.cs" />
+     <Compile Include="Assets\Resources\AFlyingController.cs" />
      <Compile Include="Assets\Scripts\CannonController.cs" />
      <Compile Include="Assets\Scripts\Gizmo.cs" />
      <Compile Include="Assets\Scripts\MainController.cs" />
