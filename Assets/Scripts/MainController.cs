@@ -60,6 +60,7 @@ public class MainController : MonoBehaviour {
 		obj.transform.position  = new Vector3(72,28,120);
 		obj.transform.localScale = new Vector3 (100, 100, 100);
 		obj.transform.parent = _goFlyings.transform;
+		AFlyingController flyCon = obj.AddComponent<AFlyingController>() as AFlyingController;
 		_flyings.Add (obj);
 	}
 
