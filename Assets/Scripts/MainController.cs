@@ -12,7 +12,7 @@ public class MainController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		_randomSeedMap = new string[]{"arisecbf","b","c","d","e","f","g","h"};
+		_randomSeedMap = new string[]{"7a","b","c","d","e","f","g","h"};
 
 		_currentLevel = PlayerPrefs.HasKey ("current_level") ? PlayerPrefs.GetInt ("current_level") : 0;
 	

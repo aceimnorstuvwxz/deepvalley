@@ -15,6 +15,7 @@ public class CannonController : MonoBehaviour {
 	private float moveRate;
 
 	private RadarController radarController;
+	private TerrainGenerator _terrainGenerator;
 
 
 	private Camera mainCamera;
@@ -28,6 +29,9 @@ public class CannonController : MonoBehaviour {
 		moveRate = 1f;
 
 		radarController = GameObject.Find ("radar").GetComponent<RadarController> ();
+		_terrainGenerator = GameObject.Find ("Terrain").GetComponent<TerrainGenerator> ();
+
+		Invoke ("setPositionToValley", 0.1f);
 	}
 	
 	// Update is called once per frame
@@ -64,5 +68,11 @@ public class CannonController : MonoBehaviour {
 		moveRate = radio > 0.7f ? 0.2f :
 			radio > 0.3f ? 0.6f : 1f;
 		mainCamera.fieldOfView = 100 - radio * sight_scope_var;
+	}
+
+	public void setPositionToValley()
+	{
+		transform.position = _terrainGenerator.getValleyPosition();
+		Debug.Log (transform.position.ToString ());
 	}
 }

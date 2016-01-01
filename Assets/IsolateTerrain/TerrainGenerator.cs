@@ -17,6 +17,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	private float [,] _heightMap;
 	private float _minHeight;
+	private Hmp _minHeightPosition;
 	private float _maxHeight;
 	private int[,,] _voxels; // 0 -empty 1-fill, convient for bit shift in case matching
 	private System.Random _randomGen;
@@ -127,7 +128,10 @@ public class TerrainGenerator : MonoBehaviour {
 	}
 	void setHmpv(Hmp p, float v) {
 		_heightMap [p.x, p.y] = v;
-		_minHeight = Mathf.Min (_minHeight, v);
+		if (v < _minHeight) {
+			_minHeight = v;
+			_minHeightPosition = p;
+		}
 		_maxHeight = Mathf.Max (_maxHeight, v);
 	}
 	bool isLegelHmp(Hmp p) {
@@ -405,6 +409,12 @@ public class TerrainGenerator : MonoBehaviour {
 		_childTerrains = new List<GameObject> ();
 		
 		nextChildMesh ();
+	}
+
+	// get deepest position
+	public Vector3 getValleyPosition()
+	{
+		return new Vector3(_minHeightPosition.x * 2f, 0, _minHeightPosition.y*2f);
 	}
 	
 	// Update is called once per frame
