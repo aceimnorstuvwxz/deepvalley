@@ -12,7 +12,7 @@ public class ScopeSwitcher : MonoBehaviour {
 	void Start () {
 		uiController = GameObject.Find ("UI-Canvas").GetComponent<UIController> ();
 		cannonController = GameObject.Find ("cannon").GetComponent<CannonController> ();
-		radarController = GameObject.Find ("radar").GetComponent<RadarController> ();
+		radarController = GameObject.Find ("Radar").GetComponent<RadarController> ();
 	}
 	
 	// Update is called once per frame

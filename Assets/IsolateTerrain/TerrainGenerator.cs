@@ -13,6 +13,7 @@ public class TerrainGenerator : MonoBehaviour {
 	public float init_height = 0f;
 	public float init_random_scope = 10f;
 	public string random_seed = "arisecbf";
+	public float center_deep_scale = 2f;
 	public bool smooth_normal = false;
 
 	private float [,] _heightMap;
@@ -146,7 +147,7 @@ public class TerrainGenerator : MonoBehaviour {
 		int centerY = (lb.y + rt.y) / 2;
 		Hmp center = new Hmp (centerX, centerY);
 		float centerValue = 0.25f * (getHmpv (lb) + getHmpv (lt) + getHmpv (rb) + getHmpv (rt)) + 
-			(_flagCenterDown ? -((float)(_randomGen.NextDouble())*randomScope) : (float)((_randomGen.NextDouble()-0.5)*2)*randomScope);
+			(_flagCenterDown ? -((float)(_randomGen.NextDouble()+0.5f)*randomScope)*center_deep_scale : (float)((_randomGen.NextDouble()-0.5)*2)*randomScope);
 		_flagCenterDown = false;
 		setHmpv (center, centerValue);
 
@@ -425,7 +426,7 @@ public class TerrainGenerator : MonoBehaviour {
 				break;
 			}
 		}
-		h += 3;
+		h += 10;
 		return new Vector3(center * 2f, h*2f, center*2f);
 	}
 

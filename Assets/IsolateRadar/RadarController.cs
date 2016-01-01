@@ -52,4 +52,19 @@ public class RadarController : MonoBehaviour {
 		scopeMiddle.transform.eulerAngles = euler;
 		scopeSmall.transform.eulerAngles = euler;
 	}
+
+	public void AddPoint(int id)
+	{
+
+	}
+
+	public void UpdatePoint(int id, Vector3 newPosition)
+	{
+
+	}
+
+	public void DeletePoint(int id)
+	{
+
+	}
 }

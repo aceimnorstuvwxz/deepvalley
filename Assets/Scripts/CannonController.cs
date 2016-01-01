@@ -28,7 +28,7 @@ public class CannonController : MonoBehaviour {
 		currentVertalRotate = 0;
 		moveRate = 1f;
 
-		radarController = GameObject.Find ("radar").GetComponent<RadarController> ();
+		radarController = GameObject.Find ("Radar").GetComponent<RadarController> ();
 		_terrainGenerator = GameObject.Find ("Terrain").GetComponent<TerrainGenerator> ();
 
 		Invoke ("setPositionToValley", 0.1f);
