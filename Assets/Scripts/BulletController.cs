@@ -10,11 +10,15 @@ public class BulletController : MonoBehaviour {
 	private GameObject _goBullets;
 	private GameObject _goCamera;
 
+
 	// Use this for initialization
 	void Start () {
 		_boreHead = GameObject.Find ("bore-head");
 		_goBullets = GameObject.Find ("Bullets");
 		_goCamera = GameObject.Find ("main-camera");
+
+
+
 	}
 	
 	// Update is called once per frame
@@ -44,4 +48,5 @@ public class BulletController : MonoBehaviour {
 		LaunchBullet ();
 
 	}
+
 }

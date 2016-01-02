@@ -5,6 +5,7 @@ using System.Collections;
 // controll the total life of a flying!
 public class AFlyingController : MonoBehaviour {
 
+
 	// Use this for initialization
 	public float flying_scale = 3f;
 	public float colider_radius = 0.8f;
@@ -16,6 +17,9 @@ public class AFlyingController : MonoBehaviour {
 	private float _maxSpeed = 2f;
 	private Vector3 _direction;
 	private float _terrainWidthHalf;
+
+	private GameObject _explosion;
+
 
 	private int _id;
 
@@ -47,6 +51,11 @@ public class AFlyingController : MonoBehaviour {
 
 		gameObject.tag = "Flying";
 
+
+
+		_explosion = Instantiate (Resources.Load("Explosion"))as GameObject;
+		_explosion.transform.SetParent (transform);
+		_explosion.transform.localPosition = Vector3.zero;
 	}
 	
 	// Update is called once per frame
@@ -56,7 +65,6 @@ public class AFlyingController : MonoBehaviour {
 		}
 		transform.position = transform.position + _direction * (_speed * Time.deltaTime);
 		Vector2 pointPosition = ( new Vector2 (transform.position.x - _terrainWidthHalf, transform.position.z - _terrainWidthHalf) )* (1 / _terrainWidthHalf);
-		Debug.Log (pointPosition.ToString ());
 		_radarController.UpdatePoint(_id, pointPosition);
 	}
 
@@ -64,8 +72,9 @@ public class AFlyingController : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		Debug.Log ("trigger enter");
 		if (other.gameObject.tag == "Bullet") {
-			Destroy (other.gameObject);
-			Destroy (gameObject);
+//			_explosion.GetComponent<ExplosionController>().boom();
+//			Destroy (other.gameObject);
+//			Destroy (gameObject);
 		}
 	}
 }

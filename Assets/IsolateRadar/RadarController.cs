@@ -70,7 +70,6 @@ public class RadarController : MonoBehaviour {
 	{
 		RectTransform rect = gameObject.GetComponent<RectTransform> ();
 		float radarScale = rect.sizeDelta.x/2;
-		Debug.Log ("radarScale" + radarScale.ToString ());
 
 		_points [id].GetComponent<RectTransform>().localPosition = new Vector3 (position.x * radarScale, position.y * radarScale, 0f);
 	}
