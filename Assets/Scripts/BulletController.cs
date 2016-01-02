@@ -30,7 +30,7 @@ public class BulletController : MonoBehaviour {
 
 		GameObject bullet = Instantiate (bullet_prefab) as GameObject;
 		bullet.transform.position = pos;
-//		bullet.transform.rotation =  //TODO diection and speed and collision rigidbody??
+		bullet.transform.rotation = _goCamera.transform.rotation;
 		bullet.transform.SetParent (_goBullets.transform);
 
 
