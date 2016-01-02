@@ -437,7 +437,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	public Vector3 nextFlyingDirection()
 	{
-		return new Vector3(1,0,0);
+		return new Vector3(0,0,1);
 	}
 
 	public float getTerrainWidth()

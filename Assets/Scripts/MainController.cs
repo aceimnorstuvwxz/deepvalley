@@ -51,7 +51,7 @@ public class MainController : MonoBehaviour {
 	IEnumerator AddingFlyings() {
 		for (;;) {
 			AddOneFlying();
-			yield return new WaitForSeconds(_flyingRandomGen.Next(1,5)*1f);
+			yield return new WaitForSeconds(_flyingRandomGen.Next(3,5)*1f);
 		}
 	}
 

@@ -11,8 +11,8 @@ public class AFlyingController : MonoBehaviour {
 	private TerrainGenerator _terrainGenerator;
 	private RadarController _radarController;
 	private float _speed = 0;
-	private float _acce = 0.5f;
-	private float _maxSpeed = 1f;
+	private float _acce = 1f;
+	private float _maxSpeed = 2f;
 	private Vector3 _direction;
 	private float _terrainWidthHalf;
 
