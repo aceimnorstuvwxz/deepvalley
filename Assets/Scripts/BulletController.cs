@@ -4,7 +4,7 @@ using System.Collections;
 public class BulletController : MonoBehaviour {
 
 	public GameObject bullet_prefab;
-
+	public float bullet_speed = 10f;
 
 	private GameObject _boreHead;
 	private GameObject _goBullets;
@@ -32,6 +32,8 @@ public class BulletController : MonoBehaviour {
 		bullet.transform.position = pos;
 		bullet.transform.rotation = _goCamera.transform.rotation;
 		bullet.transform.SetParent (_goBullets.transform);
+
+		bullet.GetComponent<TheBullet> ().SetBeginSpeed (bullet_speed* _goCamera.transform.forward);
 
 
 	}

@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\MeshGenerator.cs" />
      <Compile Include="Assets\Scripts\ScopeSwitcher.cs" />
      <Compile Include="Assets\Scripts\ShootController.cs" />
+     <Compile Include="Assets\Scripts\TheBullet.cs" />
      <Compile Include="Assets\Scripts\UIController.cs" />
      <Compile Include="Assets\Scripts\joycontroller.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
