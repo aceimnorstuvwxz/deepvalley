@@ -4,6 +4,7 @@ using System.Collections;
 public class CannonController : MonoBehaviour {
 
 	public AudioClip sound_shoot;
+	public AnimationCurve kick_back_curve;
 
 	public float shift_radio_threshold = 0.3f;
 	public float horizontal_rotate_speed = 5.0f;
@@ -20,6 +21,10 @@ public class CannonController : MonoBehaviour {
 	private RadarController radarController;
 	private TerrainGenerator _terrainGenerator;
 
+	private GameObject _cannonGuan;
+
+
+
 
 	private Camera mainCamera;
 
@@ -33,6 +38,8 @@ public class CannonController : MonoBehaviour {
 
 		radarController = GameObject.Find ("Radar").GetComponent<RadarController> ();
 		_terrainGenerator = GameObject.Find ("Terrain").GetComponent<TerrainGenerator> ();
+
+		_cannonGuan = GameObject.Find ("cannon-guan");
 
 		Invoke ("setPositionToValley", 0.1f);
 	}
@@ -79,10 +86,25 @@ public class CannonController : MonoBehaviour {
 		Debug.Log (transform.position.ToString ());
 	}
 
+	IEnumerator KickBack()
+	{
+		float t = 0f;
+		Vector3 xBegin = _cannonGuan.transform.localPosition;
+
+		while (t < 1f) {
+			t += Time.deltaTime*(3f);
+			float v = kick_back_curve.Evaluate(t);
+			_cannonGuan.transform.localPosition = xBegin + new Vector3(v*3f,0f,0f);
+			yield return null;
+		}
+	}
+
 	public void shootEffects()
 	{
-		//kickback && sound
+		// kickback 
+		StartCoroutine ("KickBack");
 
+		// sound
 		GetComponent<AudioSource> ().PlayOneShot (sound_shoot);
 	}
 }
