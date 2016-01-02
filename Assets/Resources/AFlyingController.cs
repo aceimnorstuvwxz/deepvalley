@@ -7,6 +7,7 @@ public class AFlyingController : MonoBehaviour {
 
 	// Use this for initialization
 	public float flying_scale = 3f;
+	public float colider_radius = 0.8f;
 
 	private TerrainGenerator _terrainGenerator;
 	private RadarController _radarController;
@@ -35,6 +36,17 @@ public class AFlyingController : MonoBehaviour {
 
 		// add point to radar
 		_radarController.AddPoint (_id);
+
+		Rigidbody rigid = gameObject.AddComponent<Rigidbody> ();
+		rigid.isKinematic = true;
+		rigid.useGravity = false;
+
+		SphereCollider colider = gameObject.AddComponent<SphereCollider> ();
+		colider.radius = colider_radius;
+		colider.isTrigger = true;
+
+		gameObject.tag = "Flying";
+
 	}
 	
 	// Update is called once per frame
@@ -46,5 +58,14 @@ public class AFlyingController : MonoBehaviour {
 		Vector2 pointPosition = ( new Vector2 (transform.position.x - _terrainWidthHalf, transform.position.z - _terrainWidthHalf) )* (1 / _terrainWidthHalf);
 		Debug.Log (pointPosition.ToString ());
 		_radarController.UpdatePoint(_id, pointPosition);
+	}
+
+
+	void OnTriggerEnter(Collider other) {
+		Debug.Log ("trigger enter");
+		if (other.gameObject.tag == "Bullet") {
+			Destroy (other.gameObject);
+			Destroy (gameObject);
+		}
 	}
 }
