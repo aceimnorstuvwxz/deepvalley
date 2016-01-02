@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class CannonController : MonoBehaviour {
+
+	public AudioClip sound_shoot;
+
 	public float shift_radio_threshold = 0.3f;
 	public float horizontal_rotate_speed = 5.0f;
 	public float vertical_rotate_speed = 5.0f;
@@ -74,5 +77,12 @@ public class CannonController : MonoBehaviour {
 	{
 		transform.position = _terrainGenerator.getValleyPosition();
 		Debug.Log (transform.position.ToString ());
+	}
+
+	public void shootEffects()
+	{
+		//kickback && sound
+
+		GetComponent<AudioSource> ().PlayOneShot (sound_shoot);
 	}
 }

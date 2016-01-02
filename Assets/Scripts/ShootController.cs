@@ -4,11 +4,13 @@ using System.Collections;
 public class ShootController : MonoBehaviour {
 
 	private BulletController _bulletController;
+	private CannonController _cannonController;
 
 	// Use this for initialization
 	void Start () {
 
 		_bulletController = GameObject.Find ("cannon").GetComponent<BulletController> ();
+		_cannonController = GameObject.Find ("cannon").GetComponent<CannonController> ();
 	
 	}
 	
@@ -23,6 +25,7 @@ public class ShootController : MonoBehaviour {
 		// TODO CD 
 		
 		_bulletController.ShootBatch ();
+		_cannonController.shootEffects ();
 
 
 	}
