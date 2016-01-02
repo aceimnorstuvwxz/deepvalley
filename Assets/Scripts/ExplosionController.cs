@@ -22,7 +22,7 @@ public class ExplosionController : MonoBehaviour {
 			node.transform.localPosition = Vector3.zero;
 			nodes[i] = node;
 
-			node.GetComponent<Rigidbody>().velocity = (new Vector3(Random.value-0.5f, Random.value-0.5f, Random.value-0.5f)).normalized * 1f;
+			node.GetComponent<Rigidbody>().velocity = (new Vector3(Random.value-0.5f, Random.value-0.5f, Random.value-0.5f)).normalized * 5f;
 		}
 
 	}
