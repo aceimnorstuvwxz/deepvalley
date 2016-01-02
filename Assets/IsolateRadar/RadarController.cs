@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class RadarController : MonoBehaviour {
 
 	public float scan_speed = 180; //angle per second
+	public Image point_prefab;
 
 	private GameObject scanWave;
 	
 	private Image scopeBig;
 	private Image scopeMiddle;
 	private Image scopeSmall;
+
+	private Dictionary<int, Image> _points;
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +28,8 @@ public class RadarController : MonoBehaviour {
 		scopeBig.color = new Color (1, 1, 1, 1);
 		scopeMiddle.color = new Color (1, 1, 1, 0);
 		scopeSmall.color = new Color (1, 1, 1, 0);
+
+		_points = new Dictionary<int, Image> ();
 	
 	}
 	
@@ -55,16 +61,24 @@ public class RadarController : MonoBehaviour {
 
 	public void AddPoint(int id)
 	{
-
+		Image pointImgae = Instantiate (point_prefab) as Image;
+		pointImgae.transform.SetParent (transform);
+		_points.Add (id, pointImgae);
 	}
 
-	public void UpdatePoint(int id, Vector3 newPosition)
+	public void UpdatePoint(int id, Vector2 position)
 	{
+		RectTransform rect = gameObject.GetComponent<RectTransform> ();
+		float radarScale = rect.sizeDelta.x/2;
+		Debug.Log ("radarScale" + radarScale.ToString ());
 
+		_points [id].GetComponent<RectTransform>().localPosition = new Vector3 (position.x * radarScale, position.y * radarScale, 0f);
 	}
 
 	public void DeletePoint(int id)
 	{
-
+		var img = _points [id];
+		_points.Remove(id);
+		Destroy (img);
 	}
 }

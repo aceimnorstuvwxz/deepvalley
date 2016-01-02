@@ -14,6 +14,7 @@ public class AFlyingController : MonoBehaviour {
 	private float _acce = 0.5f;
 	private float _maxSpeed = 1f;
 	private Vector3 _direction;
+	private float _terrainWidthHalf;
 
 	private int _id;
 
@@ -30,7 +31,7 @@ public class AFlyingController : MonoBehaviour {
 		_direction = _terrainGenerator.nextFlyingDirection ();
 
 		transform.localScale = new Vector3 (flying_scale,flying_scale,flying_scale);
-
+		_terrainWidthHalf = 0.5f * _terrainGenerator.getTerrainWidth ();
 
 		// add point to radar
 		_radarController.AddPoint (_id);
@@ -42,6 +43,8 @@ public class AFlyingController : MonoBehaviour {
 			_speed += _acce * Time.deltaTime;
 		}
 		transform.position = transform.position + _direction * (_speed * Time.deltaTime);
-		_radarController.UpdatePoint(_id, transform.position);
+		Vector2 pointPosition = ( new Vector2 (transform.position.x - _terrainWidthHalf, transform.position.z - _terrainWidthHalf) )* (1 / _terrainWidthHalf);
+		Debug.Log (pointPosition.ToString ());
+		_radarController.UpdatePoint(_id, pointPosition);
 	}
 }
