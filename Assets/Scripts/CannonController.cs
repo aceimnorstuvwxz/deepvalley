@@ -22,6 +22,7 @@ public class CannonController : MonoBehaviour {
 	private TerrainGenerator _terrainGenerator;
 
 	private GameObject _cannonGuan;
+	private GameObject _goCamera;
 
 
 
@@ -32,6 +33,7 @@ public class CannonController : MonoBehaviour {
 	void Start () {
 		cannonShifter = GameObject.Find ("cannon-shifter");
 		cannonBore = GameObject.Find ("cannon-bore");
+		_goCamera = GameObject.Find ("main-camera");
 		mainCamera = GameObject.Find ("main-camera").GetComponent<Camera> ();
 		currentVertalRotate = 0;
 		moveRate = 1f;
@@ -90,11 +92,13 @@ public class CannonController : MonoBehaviour {
 	{
 		float t = 0f;
 		Vector3 xBegin = _cannonGuan.transform.localPosition;
+		Vector3 cameraBegin = _goCamera.transform.localPosition;
 
 		while (t < 1f) {
 			t += Time.deltaTime*(3f);
 			float v = kick_back_curve.Evaluate(t);
 			_cannonGuan.transform.localPosition = xBegin + new Vector3(v*3f,0f,0f);
+			_goCamera.transform.localPosition = cameraBegin + new Vector3(v*0.05f,0f,0f);
 			yield return null;
 		}
 	}
