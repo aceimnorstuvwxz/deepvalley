@@ -7,6 +7,7 @@ public class AFlyingController : MonoBehaviour {
 
 
 	// Use this for initialization
+	public float existing_time = 10f;
 	public float flying_scale = 3f;
 	public float colider_radius = 0.8f;
 
@@ -22,6 +23,13 @@ public class AFlyingController : MonoBehaviour {
 
 
 	private int _id;
+	private bool _hasDamaged = false;
+	private float _timeExisted = 0;
+	private int _blood = 3;
+	private bool _falling = false;
+	private float _gravitySpeed = 0;
+	private float _gravity = 9f;
+
 
 	public void setId(int id) {
 		_id = id;
@@ -64,8 +72,19 @@ public class AFlyingController : MonoBehaviour {
 			_speed += _acce * Time.deltaTime;
 		}
 		transform.position = transform.position + _direction * (_speed * Time.deltaTime);
+
+		if (_falling) {
+			_gravitySpeed += Time.deltaTime*_gravity;
+			transform.position = transform.position + new Vector3(0f,-1f,0f) * (_gravitySpeed * Time.deltaTime);
+		}
+
 		Vector2 pointPosition = ( new Vector2 (transform.position.x - _terrainWidthHalf, transform.position.z - _terrainWidthHalf) )* (1 / _terrainWidthHalf);
 		_radarController.UpdatePoint(_id, pointPosition);
+
+		_timeExisted += Time.deltaTime;
+		if (_timeExisted > existing_time) {
+			Disappear();
+		}
 	}
 
 
@@ -75,6 +94,32 @@ public class AFlyingController : MonoBehaviour {
 //			_explosion.GetComponent<ExplosionController>().boom();
 //			Destroy (other.gameObject);
 //			Destroy (gameObject);
+			_timeExisted = 0;
+			_blood = _blood - 1;
+			if (!_hasDamaged) {
+				_hasDamaged = true;
+				StartSmoke();
+			}
+			if (_blood == 0) {
+				Fall();
+			}
 		}
+	}
+
+	void Disappear() {
+		Destroy (gameObject);
+		_radarController.DeletePoint (_id);
+	}
+
+	void StartSmoke() {
+		Debug.Log ("start smoke");
+		var smoke = Instantiate (Resources.Load("ASmoke"))as GameObject;
+		smoke.transform.SetParent (transform);
+		smoke.transform.localPosition = Vector3.zero;
+	}
+
+	void Fall() {
+		Debug.Log ("fall");
+		_falling = true;
 	}
 }
