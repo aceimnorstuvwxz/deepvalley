@@ -100,7 +100,7 @@ public class AFlyingController : MonoBehaviour {
 //			Fall();
 //		}
 
-		if (transform.position.y < -20) {
+		if (transform.position.y < -100) {
 			Destroy(gameObject);
 		}
 
