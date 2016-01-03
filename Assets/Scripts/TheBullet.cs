@@ -5,12 +5,18 @@ public class TheBullet : MonoBehaviour {
 	private GameObject _explosion;
 	public AudioClip sound_boom;
 
+	private TerrainGenerator _terrainGenerator;
+	private float _width;
+
 //	private Rigidbody
 	// Use this for initialization
 	void Start () {
 		
 		_explosion = Instantiate (Resources.Load("Explosion"))as GameObject;
 		//		_explosion.transform.SetParent (transform);
+
+		_terrainGenerator = GameObject.Find ("Terrain").GetComponent<TerrainGenerator> ();
+		_width = _terrainGenerator.getTerrainWidth ();
 	}
 
 	public void SetBeginSpeed(Vector3 speed)
@@ -20,7 +26,10 @@ public class TheBullet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (transform.position.x < 0 || transform.position.z < 0 || transform.position.x > _width || transform.position.z > _width) {
+			Debug.Log("bullet out");
+			Destroy(gameObject);
+		}
 	}
 
 	

@@ -7,7 +7,7 @@ public class AFlyingController : MonoBehaviour {
 
 
 	// Use this for initialization
-	public float existing_time = 10f;
+	public float existing_time = 20f;
 	public float flying_scale = 3f;
 	public float colider_radius = 0.8f;
 
