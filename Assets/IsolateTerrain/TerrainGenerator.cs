@@ -10,7 +10,10 @@ public class TerrainGenerator : MonoBehaviour {
 
 	public int width_para_n = 5; //2^N + 1 per edge
 	public float reduce_rate = 0.7f; //random value scope reduce radio
-	public float init_height = 0f;
+	public float init_height_left_bottom = 0f;
+	public float init_height_left_top = 10f;
+	public float init_height_right_top = 10f;
+	public float init_height_right_bottom = 0f;
 	public float init_random_scope = 10f;
 	public string random_seed = "arisecbf";
 	public float center_deep_scale = 2f;
@@ -93,10 +96,10 @@ public class TerrainGenerator : MonoBehaviour {
 		width += 1;
 
 		_heightMap = new float[width,width];
-		_heightMap [0,0] = init_height;
-		_heightMap [0,width - 1] = init_height;
-		_heightMap [width - 1,0] = init_height;
-		_heightMap [width - 1,width - 1] = init_height;
+		_heightMap [0, 0] = init_height_left_bottom;
+		_heightMap [0,width - 1] = init_height_left_top;
+		_heightMap [width - 1,0] = init_height_right_bottom;
+		_heightMap [width - 1,width - 1] = init_height_right_top;
 
 		_minHeight = 100000;
 		_maxHeight = -100000;
