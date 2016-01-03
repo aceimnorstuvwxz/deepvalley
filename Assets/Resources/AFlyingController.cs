@@ -10,6 +10,7 @@ public class AFlyingController : MonoBehaviour {
 	public float existing_time = 20f;
 	public float flying_scale = 3f;
 	public float colider_radius = 0.8f;
+	public float target_scale = 1f;
 
 	private TerrainGenerator _terrainGenerator;
 	private RadarController _radarController;
@@ -29,6 +30,7 @@ public class AFlyingController : MonoBehaviour {
 	private bool _falling = false;
 	private float _gravitySpeed = 0;
 	private float _gravity = 9f;
+
 
 
 	public void setId(int id) {
@@ -64,10 +66,15 @@ public class AFlyingController : MonoBehaviour {
 		_explosion = Instantiate (Resources.Load("Explosion"))as GameObject;
 		_explosion.transform.SetParent (transform);
 		_explosion.transform.localPosition = Vector3.zero;
+
+		Appear ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (_displeared)
+			return;
+
 		if (_speed < _maxSpeed) {
 			_speed += _acce * Time.deltaTime;
 		}
@@ -106,9 +113,34 @@ public class AFlyingController : MonoBehaviour {
 		}
 	}
 
+	private bool _displeared = false;
 	void Disappear() {
-		Destroy (gameObject);
+		_displeared = true;
+		StartCoroutine ("SmallOut");
+	}
+
+	void Appear() {
+		transform.localScale = new Vector3 (0.01f, 0.01f, 0.01f);
+		StartCoroutine ("BigIn");
+	}
+
+	IEnumerator BigIn()
+	{
+		while (transform.localScale.x < target_scale) {
+			transform.localScale = transform.localScale * 1.2f;
+			yield return null;
+		}
+	}
+
+	IEnumerator SmallOut()
+	{
+		while (transform.localScale.x > 0.01) {
+			transform.localScale = transform.localScale * 0.8f;
+			yield return null;
+		}
+		
 		_radarController.DeletePoint (_id);
+		Destroy(gameObject);
 	}
 
 	void StartSmoke() {
