@@ -68,6 +68,9 @@ public class RadarController : MonoBehaviour {
 
 	public void UpdatePoint(int id, Vector2 position)
 	{
+		if (!_points.ContainsKey (id))
+			return;
+
 		RectTransform rect = gameObject.GetComponent<RectTransform> ();
 		float radarScale = rect.sizeDelta.x/2;
 
@@ -76,6 +79,9 @@ public class RadarController : MonoBehaviour {
 
 	public void DeletePoint(int id)
 	{
+		if (!_points.ContainsKey (id))
+			return;
+
 		var img = _points [id];
 		_points.Remove(id);
 		Destroy (img);

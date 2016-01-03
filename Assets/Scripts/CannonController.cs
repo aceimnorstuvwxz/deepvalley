@@ -54,7 +54,7 @@ public class CannonController : MonoBehaviour {
 
 	// move the cannon in horizontal and the gun in vertical
 	// radioXY is centered and uniformed in [-1,1]
-	public void shift(Vector2 radioXY)
+	void shift(Vector2 radioXY)
 	{
 
 		if (radioXY.magnitude < shift_radio_threshold) {
@@ -73,6 +73,17 @@ public class CannonController : MonoBehaviour {
 			currentVertalRotate += delta;
 			cannonBore.transform.Rotate(new Vector3(0,0,-delta));
 		}
+	}
+
+
+	public void move(int moveMode) 
+	{
+		 //0-1-2-3 left, right, top, bottom
+		Vector2 radioXY = new Vector2 ();
+		radioXY.x = moveMode == 0 ? -1 : moveMode == 1 ? 1 : 0;
+		radioXY.y = moveMode == 2 ? 1 : moveMode == 3 ? -1 : 0;
+
+		shift (radioXY);
 	}
 
 	public void swiftSightScope(float radio) 
