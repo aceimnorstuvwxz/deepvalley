@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class MainController : MonoBehaviour {
 	public float delay_generate_terrain = 0.5f;
-
+	public float init_left_time = 60f*2;
+	public float time_add_per_score = 15f;
 	private int _currentLevel;
 	private string[] _randomSeedMap;
 	private int[] _targetScores;
@@ -18,6 +19,8 @@ public class MainController : MonoBehaviour {
 	private int _currentScore;
 	private int _targetScore;
 	private float _leftTime;
+	private bool _running = false;
+	private Color _leftTextOldColor;
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +34,7 @@ public class MainController : MonoBehaviour {
 		string randomSeed = _randomSeedMap[_currentLevel];
 
 
-		_leftTime = 2 * 60;
+		_leftTime = init_left_time;
 		_targetScore = _targetScores [_currentLevel];
 		_currentScore = 0;
 
@@ -49,6 +52,8 @@ public class MainController : MonoBehaviour {
 		_terrainGenerator.generateTerrain ();
 
 		_goFlyings = GameObject.Find ("Flyings");
+		_leftTextOldColor = _textLeftTime.color;
+		RefreshTime ();
 
 		Invoke ("StartAddFlying", 3);
 	}
@@ -60,6 +65,7 @@ public class MainController : MonoBehaviour {
 	void StartAddFlying()
 	{
 		string	seed = Time.time.ToString();
+		_running = true;
 //		_flyings = new List<GameObject> ();
 		_idIndex = 0;
 		
@@ -91,22 +97,36 @@ public class MainController : MonoBehaviour {
 	{
 		_currentScore++;
 		_textCurrentScore.text = (_currentScore < 10 ? "0" : "") + _currentScore.ToString ();
+		_leftTime = Mathf.Min (init_left_time, _leftTime + time_add_per_score);
 
 		if (_currentScore == _targetScore) {
 			Debug.Log("Win");
 		}
 	}
 
+	void RefreshTime() 
+	{
+		if (_leftTime > 0) {
+			_leftTime = Mathf.Max(_leftTime - Time.deltaTime, 0f);
+
+			int minut = (int)(_leftTime / 60);
+			int second = (int)((_leftTime - minut * 60));
+			_textLeftTime.text = minut.ToString () + ":" + (second < 10 ? "0" : "") + second.ToString ();
+
+			Color c = _leftTime < 10 ? Color.red : _leftTextOldColor;
+			_textLeftTime.color = c;
+		}
+
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		_leftTime -= Time.deltaTime;
-		int minut = (int)(_leftTime / 60);
-		int second = (int)((_leftTime - minut * 60));
-		_textLeftTime.text = minut.ToString () + ":" + (second < 10 ? "0" : "") + second.ToString ();
 
-		if (_leftTime <= 0) {
-			Debug.Log("GO");
+		if (_running) {
+			RefreshTime();
+			if (_leftTime <= 0) {
+				Debug.Log ("GO");
+			}
 		}
 	}
 }

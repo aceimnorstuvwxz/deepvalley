@@ -31,6 +31,8 @@ public class AFlyingController : MonoBehaviour {
 	private float _gravitySpeed = 0;
 	private float _gravity = 9f;
 
+	private MainController _mainController;
+
 
 
 	public void setId(int id) {
@@ -66,6 +68,8 @@ public class AFlyingController : MonoBehaviour {
 		_explosion = Instantiate (Resources.Load("Explosion"))as GameObject;
 		_explosion.transform.SetParent (transform);
 		_explosion.transform.localPosition = Vector3.zero;
+
+		_mainController = GameObject.Find ("Terrain").GetComponent<MainController> ();
 
 		Appear ();
 	}
@@ -127,6 +131,7 @@ public class AFlyingController : MonoBehaviour {
 			}
 			if (_blood == 0) {
 				//TODO win one!
+				_mainController.AddScore();
 				Fall();
 			}
 		}
