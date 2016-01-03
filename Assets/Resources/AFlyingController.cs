@@ -175,6 +175,7 @@ public class AFlyingController : MonoBehaviour {
 	}
 
 	void Fall() {
+		_radarController.DeletePoint (_id);
 		Debug.Log ("fall");
 		_falling = true;
 	}

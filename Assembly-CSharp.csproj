@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\ShootController.cs" />
      <Compile Include="Assets\Scripts\TheBullet.cs" />
      <Compile Include="Assets\Scripts\UIController.cs" />
+     <Compile Include="Assets\Scripts\ViewButton.cs" />
      <Compile Include="Assets\Scripts\joycontroller.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Shaders\Mobile-Particle-Add.shader" />

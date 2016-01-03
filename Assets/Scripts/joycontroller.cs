@@ -43,8 +43,8 @@ public class joycontroller : MonoBehaviour {
 		}
 
 
-		Debug.Log(string.Format("xMin={0}, xMax={1}, yMin={2}, yMax={3}, rx={4}, ry={5}",
-		                        xMin, xMax, yMin, yMax, posRadio.x, posRadio.y));
+//		Debug.Log(string.Format("xMin={0}, xMax={1}, yMin={2}, yMax={3}, rx={4}, ry={5}",
+//		                        xMin, xMax, yMin, yMax, posRadio.x, posRadio.y));
 
 		return (position.x >= xMin && position.x <= xMax &&
 		        position.y >= yMin && position.y <= yMax);
