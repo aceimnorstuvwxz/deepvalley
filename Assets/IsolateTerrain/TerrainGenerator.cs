@@ -444,6 +444,15 @@ public class TerrainGenerator : MonoBehaviour {
 	{
 		return _voxels.GetLength(0)*2f;
 	}
+
+	/*
+	public bool CheckSolid(Vector3 p)
+	{
+		int x = Convert.ToInt32 (p.x * 0.5f);
+		int y = Convert.ToInt32 (p.z * 0.5f);
+		int h = Convert.ToInt32 (p.y * 0.5f);
+		return _voxels [x, y, h] != 0;
+	}*/
 	
 	// Update is called once per frame
 	void Update () {

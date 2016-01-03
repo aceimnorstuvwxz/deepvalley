@@ -26,7 +26,7 @@ public class AFlyingController : MonoBehaviour {
 	private int _id;
 	private bool _hasDamaged = false;
 	private float _timeExisted = 0;
-	private int _blood = 3;
+	private int _blood = 1;
 	private bool _falling = false;
 	private float _gravitySpeed = 0;
 	private float _gravity = 9f;
@@ -92,7 +92,25 @@ public class AFlyingController : MonoBehaviour {
 		if (_timeExisted > existing_time) {
 			Disappear();
 		}
+
+		//crash check
+//		if (_terrainGenerator.CheckSolid (transform.position)) {
+////			Crash();
+//			StartSmoke();
+//			Fall();
+//		}
+
+		if (transform.position.y < -20) {
+			Destroy(gameObject);
+		}
+
 	}
+
+//	void Crash()
+//	{
+//		StartSmoke ();
+//		Disappear ();
+//	}
 
 
 	void OnTriggerEnter(Collider other) {
@@ -108,6 +126,7 @@ public class AFlyingController : MonoBehaviour {
 				StartSmoke();
 			}
 			if (_blood == 0) {
+				//TODO win one!
 				Fall();
 			}
 		}
