@@ -8,9 +8,10 @@ public class AFlyingController : MonoBehaviour {
 
 	// Use this for initialization
 	public float existing_time = 20f;
-	public float flying_scale = 3f;
+	public float flying_scale = 4f;
 	public float colider_radius = 0.8f;
 	public float target_scale = 1f;
+	public float _emission = 0.25f;
 
 	private TerrainGenerator _terrainGenerator;
 	private RadarController _radarController;
@@ -26,7 +27,7 @@ public class AFlyingController : MonoBehaviour {
 	private int _id;
 	private bool _hasDamaged = false;
 	private float _timeExisted = 0;
-	private int _blood = 3;
+	private int _blood = 2;
 	private bool _falling = false;
 	private float _gravitySpeed = 0;
 	private float _gravity = 9f;
@@ -73,6 +74,9 @@ public class AFlyingController : MonoBehaviour {
 		_explosion.transform.localPosition = Vector3.zero;
 
 		_mainController = GameObject.Find ("Terrain").GetComponent<MainController> ();
+
+		GetComponentInChildren<Renderer>().sharedMaterial.SetColor("_EmissionColor", new Color (_emission,_emission,_emission,_emission));
+//		GetComponent<Renderer>().sharedMaterial.SetColor("_EmissionColor", new Color (_emission,_emission,_emission,_emission));
 
 		Appear ();
 	}

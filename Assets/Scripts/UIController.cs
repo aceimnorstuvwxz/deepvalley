@@ -37,18 +37,15 @@ public class UIController : MonoBehaviour {
 
 	IEnumerator loadingCount() {
 		for (int i = 0; i <= 101; i++) {
-			if (i == 101) {
-				textLoadingCount.enabled = false;
-				mainCamera.farClipPlane = 1000f;
-				mainCamera.GetComponent<BlurOptimized>().enabled = false;
-
-			}
 			textLoadingCount.text = "Loading..."+i.ToString()+"%";
 			mainCamera.farClipPlane = 3f+i*1.5f;
 			mainCamera.GetComponent<BlurOptimized>().blurSize = (100-i)*0.1f;
 
 			yield return null;
 		}
+		textLoadingCount.enabled = false;
+		mainCamera.farClipPlane = 1000f;
+		mainCamera.GetComponent<BlurOptimized>().enabled = false;
 	}
 
 }
