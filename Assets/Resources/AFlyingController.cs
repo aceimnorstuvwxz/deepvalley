@@ -47,7 +47,10 @@ public class AFlyingController : MonoBehaviour {
 		transform.position  = _terrainGenerator.nextFlyingPosition();
 		_direction = _terrainGenerator.nextFlyingDirection ();
 
+		float angle = Vector3.Angle (new Vector3 (0, 0, 1), _direction);
+
 		transform.localScale = new Vector3 (flying_scale,flying_scale,flying_scale);
+		transform.eulerAngles = new Vector3 (0, angle, 0);
 		_terrainWidthHalf = 0.5f * _terrainGenerator.getTerrainWidth ();
 
 		// add point to radar
