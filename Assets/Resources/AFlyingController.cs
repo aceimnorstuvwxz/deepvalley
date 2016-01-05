@@ -11,7 +11,7 @@ public class AFlyingController : MonoBehaviour {
 	public float flying_scale = 4f;
 	public float colider_radius = 0.8f;
 	public float target_scale = 1f;
-	public float _emission = 0.25f;
+	public float _emission = 0.35f;
 
 	private TerrainGenerator _terrainGenerator;
 	private RadarController _radarController;
