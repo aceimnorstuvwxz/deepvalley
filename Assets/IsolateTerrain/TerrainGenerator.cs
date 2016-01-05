@@ -24,6 +24,7 @@ public class TerrainGenerator : MonoBehaviour {
 	private Hmp _minHeightPosition;
 	private float _maxHeight;
 	private int[,,] _voxels; // 0 -empty 1-fill, convient for bit shift in case matching
+	private int[,] _voxelHeights;
 	private System.Random _randomGen;
 
 	private Dictionary<VoxelNode, int> _voxelPointIndexTable; //vertic's index lookup
@@ -207,15 +208,16 @@ public class TerrainGenerator : MonoBehaviour {
 		int voxelHeight = (int)totalHeight + 3;
 		int width = _heightMap.GetLength (0);
 		_voxels = new int[width,width,voxelHeight]; // x,y,height
+		_voxelHeights = new int[width, width];
 
 		//heightmap to voxels
 		for (int y = 0; y < width; y++) {
 			for (int x = 0; x < width; x++) {
 				float v = getHmpv(new Hmp(x,y));
 				int height = (int)(v-_minHeight);
+				_voxelHeights[x,y] = height;
 				for (int i = 0; i < voxelHeight; i++) {
 					_voxels[x,y,i] = (i <= height) ? 1 : 0;
-
 				}
 			}
 		}
@@ -435,12 +437,16 @@ public class TerrainGenerator : MonoBehaviour {
 
 	public Vector3 nextFlyingPosition()
 	{
-		return new Vector3 (100f, 40f, 118f);
+		int rbegin = (int)(_voxelHeights.GetLength (0) * 0.3);
+		int rend = (int)(_voxelHeights.GetLength (0) * 0.7);
+		int x = _randomGen.Next (rbegin, rend);
+		int y = _randomGen.Next (rbegin, rend);
+		return new Vector3 (x * 2f, (_voxelHeights [x, y]+5) * 2f, y * 2f);
 	}
 
 	public Vector3 nextFlyingDirection()
 	{
-		return new Vector3(0,0,1);
+		return (new Vector3 ((float)_randomGen.NextDouble(), 0f, (float)_randomGen.NextDouble())).normalized;
 	}
 
 	public float getTerrainWidth()
