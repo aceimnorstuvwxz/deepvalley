@@ -146,4 +146,8 @@ public class MainController : MonoBehaviour {
 			}
 		}
 	}
+
+	public void Play()
+	{
+	}
 }
