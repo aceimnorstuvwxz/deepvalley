@@ -25,19 +25,17 @@ public class MainController : MonoBehaviour {
 	void Start () {
 
 		int[] targetScores = new int[]           {5,        13,       34,       89};
-		float[] reduceRates = new float[]        {0.65f,    0.65f,    0.65f,   0.65f};
+		float[] reduceRates = new float[]        {0.65f,    0.6f,    0.65f,   0.65f};
 
-		float[] initHeightLB = new float[]       {0,        0,        0,       0};
-		float[] initHeightLT = new float[]       {30,       30,       30,      30};
-		float[] initHeightRT = new float[]       {30,       30,       30,      30};
-		float[] initHeightRB = new float[]       {0,        0,        0,       0};
+		float[] initHeightLB = new float[]       {0,        0,        0,       30};
+		float[] initHeightLT = new float[]       {30,       50,       30,      0};
+		float[] initHeightRT = new float[]       {30,       50,       30,      0};
+		float[] initHeightRB = new float[]       {0,        0,        0,       20};
 
 		float[] initRandomScope = new float[]    {15.44f,    20f,     20f,     20f};
-		string[] randomSeedMap = new string[]    {"7a",     "b",      "c",     "d"};
-		float[] centerDeepScales = new float[]   {2f,       2f,       2f,      2f};
-		bool[] smoothNormals = new bool[]         {false,    false,    false,   false};
-
-
+		string[] randomSeedMap = new string[]    {"7a",     "be",      "c",     "d3"};
+		float[] centerDeepScales = new float[]   {2f,       0f,       2f,      1.5f};
+		bool[] smoothNormals = new bool[]         {false,    false,    true,   false};
 
 		_currentLevel = PlayerPrefs.HasKey ("current_level") ? PlayerPrefs.GetInt ("current_level") : 0;
 
