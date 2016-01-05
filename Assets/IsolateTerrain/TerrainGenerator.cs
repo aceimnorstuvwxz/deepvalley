@@ -382,6 +382,8 @@ public class TerrainGenerator : MonoBehaviour {
 	public void generateTerrain(){
 		generateHeightMap ();
 		generateVoxelMesh ();
+
+		terrainFab.GetComponent<MeshRenderer> ().sharedMaterial.mainTexture = (Resources.Load ("TerrainTexture/" + ((int)(UnityEngine.Random.Range (0, 9.5f))).ToString ()) as Texture);
 	}
 
 
