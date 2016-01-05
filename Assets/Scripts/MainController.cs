@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 public class MainController : MonoBehaviour {
 	public float delay_generate_terrain = 0.5f;
@@ -189,6 +190,7 @@ public class MainController : MonoBehaviour {
 	{
 		StartCoroutine ("UICanvasIn");
 		StartCoroutine ("RadarCanvasIn");
+		StartCoroutine ("loadingCount2");
 	}
 	
 	IEnumerator UICanvasIn()
@@ -221,5 +223,19 @@ public class MainController : MonoBehaviour {
 			}
 			yield return null;
 		}
+	}
+
+	public Camera mainCamera;
+
+	IEnumerator loadingCount2() {
+		int N = 50;
+		for (int i = 0; i <= N ; i++) {
+//			mainCamera.farClipPlane = 3f+i*1.5f;
+			mainCamera.GetComponent<BlurOptimized>().blurSize = (N-i)*1f/N;
+			
+			yield return null;
+		}
+		mainCamera.farClipPlane = 1000f;
+				mainCamera.GetComponent<BlurOptimized>().enabled = false;
 	}
 }
