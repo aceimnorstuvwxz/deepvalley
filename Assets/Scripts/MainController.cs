@@ -85,6 +85,9 @@ public class MainController : MonoBehaviour {
 			uiCanvas.SetActive (true);
 			scaler.scaleFactor = 0.001f;
 		}
+
+
+		StartCoroutine ("CameraDance");
 	}
 
 	System.Random _flyingRandomGen;
@@ -159,11 +162,14 @@ public class MainController : MonoBehaviour {
 		}
 	}
 
+	private Quaternion oldRotation;
 	public void Play()
 	{
 		Debug.Log ("play");
 
 		StartCoroutine ("WelcoOut");
+		StopCoroutine ("CameraDance");
+		mainCamera.transform.rotation = oldRotation;
 		
 		Invoke ("StartAddFlying", 3);
 	}
@@ -237,5 +243,15 @@ public class MainController : MonoBehaviour {
 		}
 		mainCamera.farClipPlane = 1000f;
 				mainCamera.GetComponent<BlurOptimized>().enabled = false;
+	}
+
+	IEnumerator CameraDance()
+	{
+		Vector3 r = new Vector3 (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+		oldRotation = mainCamera.transform.rotation;
+		for (;;) {
+			mainCamera.transform.Rotate(r);
+			yield return new WaitForFixedUpdate();
+		}
 	}
 }
