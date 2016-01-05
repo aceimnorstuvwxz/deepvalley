@@ -72,7 +72,18 @@ public class MainController : MonoBehaviour {
 		_leftTextOldColor = _textLeftTime.color;
 		RefreshTime ();
 
-		Invoke ("StartAddFlying", 3);
+		{
+			GameObject uiCanvas = GameObject.Find ("UI-Canvas");
+			CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+			uiCanvas.SetActive (true);
+			scaler.scaleFactor = 0.001f;
+		}
+		{
+			GameObject uiCanvas = GameObject.Find ("Radar-Canvas");
+			CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+			uiCanvas.SetActive (true);
+			scaler.scaleFactor = 0.001f;
+		}
 	}
 
 	System.Random _flyingRandomGen;
@@ -149,5 +160,66 @@ public class MainController : MonoBehaviour {
 
 	public void Play()
 	{
+		Debug.Log ("play");
+
+		StartCoroutine ("WelcoOut");
+		
+		Invoke ("StartAddFlying", 3);
+	}
+
+	IEnumerator WelcoOut()
+	{
+
+		GameObject welcoCanvas = GameObject.Find ("Welco-Canvas");
+		CanvasScaler scaler =  welcoCanvas.GetComponent<CanvasScaler> ();
+		for (;;) {
+			scaler.scaleFactor = scaler.scaleFactor-0.2f;
+			if (scaler.scaleFactor < 0.05f) {
+				break;
+			}
+			yield return null;
+		}
+		Destroy (welcoCanvas);
+		Invoke ("StartAddFlying", 3);
+
+		Begin ();
+	}
+
+	public void Begin()
+	{
+		StartCoroutine ("UICanvasIn");
+		StartCoroutine ("RadarCanvasIn");
+	}
+	
+	IEnumerator UICanvasIn()
+	{
+		GameObject uiCanvas = GameObject.Find ("UI-Canvas");
+		CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+		uiCanvas.SetActive (true);
+		scaler.scaleFactor = 0.001f;
+		for (;;) {
+			scaler.scaleFactor = scaler.scaleFactor+0.2f;
+			if (scaler.scaleFactor > 1f) {
+				scaler.scaleFactor = 1f;
+				break;
+			}
+			yield return null;
+		}
+	}
+
+	IEnumerator RadarCanvasIn()
+	{
+		GameObject uiCanvas = GameObject.Find ("Radar-Canvas");
+		CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+		uiCanvas.SetActive (true);
+		scaler.scaleFactor = 0.001f;
+		for (;;) {
+			scaler.scaleFactor = scaler.scaleFactor+0.2f;
+			if (scaler.scaleFactor > 1f) {
+				scaler.scaleFactor = 1f;
+				break;
+			}
+			yield return null;
+		}
 	}
 }
