@@ -62,7 +62,7 @@ public class CannonController : MonoBehaviour {
 		}
 		cannonShifter.transform.Rotate (new Vector3(0,horizontal_rotate_speed*radioXY.x*moveRate,0));
 
-		radarController.turnSightScope (cannonShifter.transform.eulerAngles.y);
+		radarController.turnSightScope (cannonShifter.transform.eulerAngles.y+180+90);
 
 		//!careful for euler stays in [0-360]
 		if (currentVertalRotate > vertical_angle_max && radioXY.y > 0 ||

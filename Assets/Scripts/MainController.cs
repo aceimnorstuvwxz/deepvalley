@@ -103,7 +103,7 @@ public class MainController : MonoBehaviour {
 		string flyName = _flyingNamesGen.getRandomFlyingName ();
 		int id = _idIndex++;
 		Debug.Log ("Add flying:"+flyName+"  id:"+id.ToString());
-		GameObject obj = Instantiate( Resources.Load(flyName) )as GameObject;
+		GameObject obj = Instantiate( Resources.Load("AFlyings/"+flyName) )as GameObject;
 		obj.transform.parent = _goFlyings.transform;
 		AFlyingController flyCon = obj.AddComponent<AFlyingController>() as AFlyingController;
 		flyCon.setId (id);
