@@ -6,7 +6,7 @@ using UnityStandardAssets.ImageEffects;
 
 public class MainController : MonoBehaviour {
 	public float delay_generate_terrain = 0.5f;
-	public float init_left_time = 60f*2;
+	private float init_left_time = 60f*0.1f;
 	public float time_add_per_score = 15f;
 	private int _currentLevel;
 
@@ -86,6 +86,13 @@ public class MainController : MonoBehaviour {
 			scaler.scaleFactor = 0.001f;
 		}
 
+		{
+			GameObject uiCanvas = GameObject.Find ("GO-Canvas");
+			CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+			uiCanvas.SetActive (true);
+			scaler.scaleFactor = 0.001f;
+		}
+
 
 		StartCoroutine ("CameraDance");
 	}
@@ -158,6 +165,8 @@ public class MainController : MonoBehaviour {
 			RefreshTime();
 			if (_leftTime <= 0) {
 				Debug.Log ("GO");
+				_running = false;
+				GameOver();
 			}
 		}
 	}
@@ -248,10 +257,79 @@ public class MainController : MonoBehaviour {
 	IEnumerator CameraDance()
 	{
 		Vector3 r = new Vector3 (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+		r = r * 0.5f;
 		oldRotation = mainCamera.transform.rotation;
 		for (;;) {
 			mainCamera.transform.Rotate(r);
 			yield return new WaitForFixedUpdate();
+		}
+	}
+
+
+	public void GameOver()
+	{
+		int oldScore = 0;
+		if (PlayerPrefs.HasKey ("record")) {
+			oldScore = PlayerPrefs.GetInt("record");
+		}
+		bool bNewRecord = oldScore < _currentScore;
+		if (bNewRecord) {
+			PlayerPrefs.SetInt("record", _currentScore);
+
+			// Leaderboard!
+		}
+
+		{
+			GameObject uiCanvas = GameObject.Find ("UI-Canvas");
+			CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+			uiCanvas.SetActive (true);
+			scaler.scaleFactor = 0.001f;
+		}
+		{
+			GameObject uiCanvas = GameObject.Find ("Radar-Canvas");
+			CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+			uiCanvas.SetActive (true);
+			scaler.scaleFactor = 0.001f;
+		}
+
+		GameObject.Find ("first_line").GetComponent<Text> ().text = bNewRecord ? "New Record" : "Time Out";
+		GameObject.Find ("pts_line").GetComponent<Text> ().text = _currentScore.ToString () + "pts";
+
+		StartCoroutine ("blurOut");
+		StartCoroutine ("GOCanvasIn");
+	}
+
+	IEnumerator GOCanvasIn()
+	{
+		GameObject uiCanvas = GameObject.Find ("GO-Canvas");
+		CanvasScaler scaler = uiCanvas.GetComponent<CanvasScaler> ();
+		uiCanvas.SetActive (true);
+		scaler.scaleFactor = 0.001f;
+		for (;;) {
+			scaler.scaleFactor = scaler.scaleFactor+0.2f;
+			if (scaler.scaleFactor > 1f) {
+				scaler.scaleFactor = 1f;
+				break;
+			}
+			yield return null;
+		}
+	}
+
+	public void Retry()
+	{
+//		Application.UnloadLevel (Application.loadedLevel);
+		Application.LoadLevel (Application.loadedLevel);
+	}
+
+	IEnumerator blurOut() 
+	{
+
+		int N = 50;
+		mainCamera.GetComponent<BlurOptimized> ().enabled = true;
+		for (int i = 0; i <= N ; i++) {
+			mainCamera.GetComponent<BlurOptimized>().blurSize = (i)*1f/N;
+			
+			yield return null;
 		}
 	}
 }
