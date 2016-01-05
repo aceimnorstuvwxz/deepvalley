@@ -8,8 +8,7 @@ public class MainController : MonoBehaviour {
 	public float init_left_time = 60f*2;
 	public float time_add_per_score = 15f;
 	private int _currentLevel;
-	private string[] _randomSeedMap;
-	private int[] _targetScores;
+
 
 	private TerrainGenerator _terrainGenerator;
 	private GameObject _goFlyings;
@@ -25,17 +24,28 @@ public class MainController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		_randomSeedMap = new string[]{"7a", "b", "c", "d", "e", "f", "g", "h"};
-		_targetScores = new int[]    {3,     5,   8,   13,  21,  34,  55,  89};
+		int[] targetScores = new int[]           {5,        13,       34,       89};
+		float[] reduceRates = new float[]        {0.65f,    0.65f,    0.65f,   0.65f};
+
+		float[] initHeightLB = new float[]       {0,        0,        0,       0};
+		float[] initHeightLT = new float[]       {30,       30,       30,      30};
+		float[] initHeightRT = new float[]       {30,       30,       30,      30};
+		float[] initHeightRB = new float[]       {0,        0,        0,       0};
+
+		float[] initRandomScope = new float[]    {15.44f,    20f,     20f,     20f};
+		string[] randomSeedMap = new string[]    {"7a",     "b",      "c",     "d"};
+		float[] centerDeepScales = new float[]   {2f,       2f,       2f,      2f};
+		bool[] smoothNormals = new bool[]         {false,    false,    false,   false};
+
 
 
 		_currentLevel = PlayerPrefs.HasKey ("current_level") ? PlayerPrefs.GetInt ("current_level") : 0;
+
+		//debug
+		_currentLevel = 0;
 	
-		string randomSeed = _randomSeedMap[_currentLevel];
-
-
 		_leftTime = init_left_time;
-		_targetScore = _targetScores [_currentLevel];
+		_targetScore = targetScores [_currentLevel];
 		_currentScore = 0;
 
 		_textLeftTime = GameObject.Find ("left_time").GetComponent<Text> ();
@@ -47,8 +57,17 @@ public class MainController : MonoBehaviour {
 
 
 		_terrainGenerator = GetComponent<TerrainGenerator> ();
-		_terrainGenerator.random_seed = randomSeed;
 		
+		_terrainGenerator.reduce_rate = reduceRates [_currentLevel];
+		_terrainGenerator.init_height_left_bottom = initHeightLB [_currentLevel];
+		_terrainGenerator.init_height_left_top = initHeightLT [_currentLevel];
+		_terrainGenerator.init_height_right_top = initHeightRT [_currentLevel];
+		_terrainGenerator.init_height_right_bottom = initHeightRB [_currentLevel];
+		_terrainGenerator.init_random_scope = initRandomScope [_currentLevel];
+		_terrainGenerator.random_seed = randomSeedMap[_currentLevel];
+		_terrainGenerator.center_deep_scale = centerDeepScales [_currentLevel];
+		_terrainGenerator.smooth_normal = smoothNormals [_currentLevel];
+
 		_terrainGenerator.generateTerrain ();
 
 		_goFlyings = GameObject.Find ("Flyings");
