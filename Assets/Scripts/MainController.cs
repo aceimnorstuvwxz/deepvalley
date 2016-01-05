@@ -6,7 +6,7 @@ using UnityStandardAssets.ImageEffects;
 
 public class MainController : MonoBehaviour {
 	public float delay_generate_terrain = 0.5f;
-	private float init_left_time = 60f*0.1f;
+	private float init_left_time = 60f*2f;
 	public float time_add_per_score = 15f;
 	private int _currentLevel;
 
