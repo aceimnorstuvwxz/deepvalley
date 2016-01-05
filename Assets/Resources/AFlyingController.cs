@@ -26,7 +26,7 @@ public class AFlyingController : MonoBehaviour {
 	private int _id;
 	private bool _hasDamaged = false;
 	private float _timeExisted = 0;
-	private int _blood = 1;
+	private int _blood = 3;
 	private bool _falling = false;
 	private float _gravitySpeed = 0;
 	private float _gravity = 9f;
@@ -137,7 +137,7 @@ public class AFlyingController : MonoBehaviour {
 				_mainController.AddScore();
 				Fall();
 			}
-			_direction = (_direction + other.gameObject.transform.forward).normalized;
+//			_direction = (_direction + other.gameObject.transform.forward).normalized;
 
 
 		}

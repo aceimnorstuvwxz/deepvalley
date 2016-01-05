@@ -431,7 +431,7 @@ public class TerrainGenerator : MonoBehaviour {
 				break;
 			}
 		}
-		h += 10;
+		h += 4;
 		return new Vector3(center * 2f, h*2f, center*2f);
 	}
 

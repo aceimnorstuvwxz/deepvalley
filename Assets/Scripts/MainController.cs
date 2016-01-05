@@ -56,15 +56,15 @@ public class MainController : MonoBehaviour {
 
 		_terrainGenerator = GetComponent<TerrainGenerator> ();
 		
-		_terrainGenerator.reduce_rate = reduceRates [_currentLevel];
-		_terrainGenerator.init_height_left_bottom = initHeightLB [_currentLevel];
-		_terrainGenerator.init_height_left_top = initHeightLT [_currentLevel];
-		_terrainGenerator.init_height_right_top = initHeightRT [_currentLevel];
-		_terrainGenerator.init_height_right_bottom = initHeightRB [_currentLevel];
-		_terrainGenerator.init_random_scope = initRandomScope [_currentLevel];
-		_terrainGenerator.random_seed = randomSeedMap[_currentLevel];
-		_terrainGenerator.center_deep_scale = centerDeepScales [_currentLevel];
-		_terrainGenerator.smooth_normal = smoothNormals [_currentLevel];
+		_terrainGenerator.reduce_rate = Random.Range(0.55f,0.7f);//reduceRates [_currentLevel];
+		_terrainGenerator.init_height_left_bottom = Random.Range (-5, 15);// initHeightLB [_currentLevel];
+		_terrainGenerator.init_height_left_top = Random.Range (5, 35);//initHeightLT [_currentLevel];
+		_terrainGenerator.init_height_right_top = Random.Range (5, 35);//initHeightRT [_currentLevel];
+		_terrainGenerator.init_height_right_bottom = Random.Range (-5, 15);//initHeightRB [_currentLevel];
+		_terrainGenerator.init_random_scope = Random.Range (15f, 25f);// initRandomScope [_currentLevel];
+		_terrainGenerator.random_seed = Random.Range (0f,10000f).ToString();//randomSeedMap[_currentLevel];
+		_terrainGenerator.center_deep_scale = Random.Range (0,2f);// centerDeepScales [_currentLevel];
+		_terrainGenerator.smooth_normal = false;//smoothNormals [_currentLevel];
 
 		_terrainGenerator.generateTerrain ();
 
