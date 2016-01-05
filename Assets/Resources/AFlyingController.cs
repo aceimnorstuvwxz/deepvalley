@@ -137,6 +137,9 @@ public class AFlyingController : MonoBehaviour {
 				_mainController.AddScore();
 				Fall();
 			}
+			_direction = (_direction + other.gameObject.transform.forward).normalized;
+
+
 		}
 	}
 
